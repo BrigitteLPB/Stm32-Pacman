@@ -10,9 +10,11 @@
 
 
 	// const
-
+	#define abs(x) ((x<0)?-x:x)
 
 	// functions
+	void JOYSTICK_init();
 
+	void JOYSTICK_test();
 
 #endif

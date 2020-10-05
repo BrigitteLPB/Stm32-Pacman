@@ -13,6 +13,8 @@
 #include "macro_types.h"
 #include "systick.h"
 
+#include "Abstract/Joystick/joystick.h"
+
 void writeLED(bool_e b)
 {
 	HAL_GPIO_WritePin(LED_GREEN_GPIO, LED_GREEN_PIN, b);
@@ -55,15 +57,15 @@ int main(void)
 	//On ajoute la fonction process_ms à la liste des fonctions appelées automatiquement chaque ms par la routine d'interruption du périphérique SYSTICK
 	Systick_add_callback_function(&process_ms);
 
-	// coucou
-
+	JOYSTICK_init();
 
 	while(1)	//boucle de tâche de fond
 	{
 		if(!t)
 		{
-			t = 200;
+			t = 1000;
 			HAL_GPIO_TogglePin(LED_GREEN_GPIO, LED_GREEN_PIN);
+			JOYSTICK_test();
 		}
 
 	}
