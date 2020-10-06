@@ -13,9 +13,9 @@ static volatile bool FLAG_1S = false;
 
 // const
 	typedef adc_id_e ADC_CHANNEL;
-	#define MILIEU (uint8_t)2048
-	#define TOLERANCE_MAX 1.05
-	#define TOLERANCE_MIN 0.95
+	#define MILIEU (uint16_t) 2048
+	#define TOLERANCE_MAX 500
+	#define TOLERANCE_MIN -500
 	#define abs(x) ((x<0)?-x:x)
 
 
@@ -28,30 +28,33 @@ static volatile bool FLAG_1S = false;
 
 // private function
 	JOYSTICK_direction PRIVATE_JOYSTICK_getDirection(ADC_CHANNEL X, ADC_CHANNEL Y){
-		 int16_t X_value = ADC_getValue(X);
-		 int16_t Y_value = ADC_getValue(Y);
-		if (X_value>MILIEU*TOLERANCE_MIN && X_value<TOLERANCE_MAX && Y_value>MILIEU*TOLERANCE_MIN && Y_value<TOLERANCE_MAX){
-			return MILIEU;
+		int16_t X_value = ADC_getValue(X)-MILIEU;
+		//printf("X value : %d\n",MILIEU);
+		int16_t Y_value = ADC_getValue(Y)-MILIEU;
+		//printf("X value : %d\n",X_value);
+		//printf("Y value : %d\n",Y_value);
+		if (X_value>TOLERANCE_MIN && X_value<TOLERANCE_MAX && Y_value>TOLERANCE_MIN && Y_value<TOLERANCE_MAX){
+			return NEUTRE;
 		}
-		else if (X_value>MILIEU*TOLERANCE_MAX && abs(Y_value-2048)<(X_value-2048)){
+		else if (X_value>TOLERANCE_MAX && abs(Y_value)<(X_value)){
 			return DROITE;
 		}
-		else if(Y_value>MILIEU*TOLERANCE_MAX && abs(X_value-2048)<=(Y_value-2048)){
-			return HAUT;
+		else if(Y_value>TOLERANCE_MAX && abs(X_value)<=(Y_value)){
+			return BAS;
 		}
-		else if(X_value<MILIEU*TOLERANCE_MIN && abs(Y_value-2048)<abs(X_value-2048)){
+		else if(X_value<TOLERANCE_MIN && abs(Y_value)<abs(X_value)){
 			return GAUCHE;
 		}
 		else{
-			return BAS;
+			return HAUT;
 		}
 	 }
 
-	void process_ms(){
-		volatile uint16_t t = 0;
+	void JOYSTICK_private_process_ms(){
+		static uint16_t t = 0;
 
 		if(!t){
-			t= 1000;
+			t= 3000;
 			FLAG_1S = true;
 		}else{
 			FLAG_1S = false;
@@ -76,12 +79,11 @@ static volatile bool FLAG_1S = false;
 	 }
 
 	 void JOYSTICK_test(){
-		 Systick_add_callback_function(&process_ms);
+		 Systick_add_callback_function(&JOYSTICK_private_process_ms);
 
 		 while(true){
 			 if(FLAG_1S){
 				 JOYSTICK_direction dir = JOYSTICK_getDirection(JOYSTICK1);
-
 				 switch(dir){
 				 	 case NEUTRE:
 				 		 printf("NEUTRE");
