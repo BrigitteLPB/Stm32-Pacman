@@ -18,7 +18,6 @@ static volatile bool FLAG_1S = false;
 	#define TOLERANCE_MIN -500
 	#define abs(x) ((x<0)?-x:x)
 
-
 //prototype
 	static JOYSTICK_direction PRIVATE_JOYSTICK_getDirection(ADC_CHANNEL X, ADC_CHANNEL Y);
 

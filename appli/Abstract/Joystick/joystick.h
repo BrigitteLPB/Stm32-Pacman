@@ -10,9 +10,9 @@
 	#include "stm32f1_adc.h"
 
 	// const
-	#define X1 ADC_1	//joystick nï¿½1
+	#define X1 ADC_1	//joystick nè1
 	#define Y1 ADC_0
-	#define X2 ADC_9	//joystick nï¿½2
+	#define X2 ADC_9	//joystick n2
 	#define Y2 ADC_8
 
 	typedef enum {
