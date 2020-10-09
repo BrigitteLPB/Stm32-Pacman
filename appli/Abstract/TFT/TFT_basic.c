@@ -154,7 +154,7 @@ void PRIVATE_TFT_draw_filled_triangle(const pos_s *A, const pos_s *B, const pos_
 	droite_s dCA = PRIVATE_TFT_find_straigth_line(C, A);
 
 	pos_s *point_milieu = PRIVATE_TFT_find_middle(A, B, C);
-	droite_s *base =
+//	droite_s *base =
 
 	//code
 
