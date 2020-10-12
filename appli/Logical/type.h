@@ -12,17 +12,33 @@
 	#include "stdbool.h"
 	#include "joystick.h"
 
+//IA state
 
-	// const
-	#define ALIVE true
+	typedef enum{
+		ALIVE,
+		DEAD,
+		PREDATOR		//under gumball effect
+	}type_state_pacman;
 
+	typedef enum{
+		FREE,
+		CAPTIVE,
+		PREY			//under gumball effect
+	}type_state_FANTOME;
+
+	typedef struct{
+		type_state_pacman pacman;
+		type_state_FANTOME fantome;
+	};
+
+//state cell
 	typedef enum{
 		WALL,		//cell where we have a wall
 		FREE,		//cell with nothing on it
 		OBJECT		//cell with a point on it
 	}type_cell;
 
-	typedef enum{
+	typedef enum{		//OBJECT
 		PACMAN,
 		FANTOME,
 		GUMBALL,
@@ -32,9 +48,14 @@
 
 	typedef struct {
 		void *cell;
-		enum type_cell;
-		enum type_object;
-	}state_cell;
+		type_cell square;
+		type_object object;
+	}cell_s;
+
+
+
+
+
 
 
 
