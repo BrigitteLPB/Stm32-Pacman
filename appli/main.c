@@ -15,6 +15,8 @@
 
 #include "Abstract/Joystick/joystick.h"
 
+#include "tft_ili9341/stm32f1_ili9341.h"
+
 void writeLED(bool_e b)
 {
 	HAL_GPIO_WritePin(LED_GREEN_GPIO, LED_GREEN_PIN, b);
@@ -57,11 +59,12 @@ int main(void)
 	//On ajoute la fonction process_ms � la liste des fonctions appel�es automatiquement chaque ms par la routine d'interruption du p�riph�rique SYSTICK
 	Systick_add_callback_function(&process_ms);
 
-
 	JOYSTICK_init();
 
 	/*--- TESTS ---*/
 	JOYSTICK_test();
+
+	ILI9341_DrawLine();
 
 	while(1)	//boucle de t�che de fond
 	{
