@@ -14,8 +14,8 @@
 #include "systick.h"
 
 #include "Abstract/Joystick/joystick.h"
-
 #include "tft_ili9341/stm32f1_ili9341.h"
+#include "Logical/type.h"
 
 void writeLED(bool_e b)
 {
@@ -61,18 +61,25 @@ int main(void)
 
 	JOYSTICK_init();
 
-	/*--- TESTS ---*/
-	JOYSTICK_test();
+	ILI9341_Init();
 
-	ILI9341_DrawLine();
+	/*--- TESTS ---*/
+	//JOYSTICK_test();
+	for(int i=0;i<LENGTH;i++){
+		for(int j=0;j<HEIGHT;j++){
+			if (i<17 ||  j<17){
+				ILI9341_DrawPixel(i,j,ILI9341_COLOR_RED);
+			}
+			else if(i>313 ||j>223){
+				ILI9341_DrawPixel(i,j,ILI9341_COLOR_RED);
+			}
+		}
+	}
 
 	while(1)	//boucle de t�che de fond
 	{
-		if(!t)
-		{
-			t = 200;
-			HAL_GPIO_TogglePin(LED_GREEN_GPIO, LED_GREEN_PIN);
-		}
+
+		ILI9341_DrawFilledRectangle(0,0,16,16,ILI9341_COLOR_GREEN2);
 
 	}
 }

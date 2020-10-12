@@ -10,9 +10,10 @@
 
 	// include
 	#include "stdbool.h"
-	#include "joystick.h"
 
 //IA state
+#define LENGTH 320
+#define HEIGHT 240
 
 	typedef enum{
 		ALIVE,
@@ -21,7 +22,7 @@
 	}type_state_pacman;
 
 	typedef enum{
-		FREE,
+		LIBERATE,
 		CAPTIVE,
 		PREY			//under gumball effect
 	}type_state_FANTOME;
@@ -29,7 +30,7 @@
 	typedef struct{
 		type_state_pacman pacman;
 		type_state_FANTOME fantome;
-	};
+	}IA_state;
 
 //state cell
 	typedef enum{
@@ -51,6 +52,13 @@
 		type_cell square;
 		type_object object;
 	}cell_s;
+
+	typedef struct{
+		IA_state ia;
+		cell_s display;
+		int Length[LENGTH];
+		int Heigth[HEIGHT];
+	}game_s;
 
 
 
