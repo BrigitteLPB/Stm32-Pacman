@@ -10,6 +10,7 @@
 
 	// include
 	#include "stdbool.h"
+	#include "macro_types.h"
 
 //IA state
 	#define LENGTH 32	// largeur de la map
@@ -17,7 +18,7 @@
 
 	#define MAX_PHANTOM	4	// maximum on the map
 
-	typedef PACAMAN_unit uint8_t;
+	typedef uint8_t PACMAN_unit;
 
 	typedef  struct{
 		PACMAN_unit x;
@@ -74,7 +75,7 @@
 	}type_state_PHANTOM;	
 
 	typedef struct {
-		PACMAN_positon pos;
+		PACMAN_position pos;
 		type_state_PHANTOM state;
 		int8_t timer;		// 0: move, -1: stay, >0: wait for moving
 	}phantom_s;
@@ -84,7 +85,7 @@
 	typedef struct{
 		uint8_t phantom_count;
 		uint8_t points_count;	// 0 -> win
-		cell_s map[HEIGTH][LENGTH];
+		cell_s map[HEIGHT][LENGTH];
 		phantom_s *phantoms[MAX_PHANTOM];
 		pacman_s *pacman;
 	}game_s;

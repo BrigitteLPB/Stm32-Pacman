@@ -65,16 +65,6 @@ int main(void)
 
 	/*--- TESTS ---*/
 	//JOYSTICK_test();
-	for(int i=0;i<LENGTH;i++){
-		for(int j=0;j<HEIGHT;j++){
-			if (i<17 ||  j<17){
-				ILI9341_DrawPixel(i,j,ILI9341_COLOR_RED);
-			}
-			else if(i>313 ||j>223){
-				ILI9341_DrawPixel(i,j,ILI9341_COLOR_RED);
-			}
-		}
-	}
 
 	while(1)	//boucle de t�che de fond
 	{
