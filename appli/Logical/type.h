@@ -85,7 +85,7 @@
 	typedef struct{
 		uint8_t phantom_count;
 		uint8_t points_count;	// 0 -> win
-		cell_s map[HEIGHT][LENGTH];
+		cell_s map[LENGTH][HEIGHT];
 		phantom_s *phantoms[MAX_PHANTOM];
 		pacman_s *pacman;
 	}game_s;

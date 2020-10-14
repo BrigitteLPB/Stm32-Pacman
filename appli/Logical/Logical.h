@@ -9,6 +9,15 @@
 #define LOGICAL_LOGICAL_H_
 
 	// single include for the game logic
+#include "Abstract/Joystick/joystick.h"
+#include "type.h"
+#include "stm32f1_ili9341.h"
+
+
+
+
+void mouvement(JOYSTICK_direction direction);
+void initWALL();
 
 
 #endif /* LOGICAL_LOGICAL_H_ */

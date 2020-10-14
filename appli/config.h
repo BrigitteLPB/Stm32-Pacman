@@ -10,8 +10,8 @@
 #include "stm32f1xx_hal.h"
 
 //Choix de la cible utilisée.
-#define NUCLEO	1
-#define BLUEPILL 0
+#define NUCLEO	0
+#define BLUEPILL 1
 
 
 #define TRACE	0		//permet le débogage sur un simulateur QEMU. Doit rester à 0 par défaut.

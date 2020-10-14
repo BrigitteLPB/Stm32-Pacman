@@ -164,7 +164,7 @@ void ILI9341_Init(void)
 	
 	/* Set default settings */
 	ILI9341_x = ILI9341_y = 0;
-	ILI9341_Rotate(ILI9341_Orientation_Portrait_1);
+	ILI9341_Rotate(ILI9341_Orientation_Landscape_1);
 	//ILI9341_Rotate(ILI9341_Orientation_Landscape_1);	//Utiliser cette fonction pour modifier l'orientation en paysage
 	
 	/* Fill with white color */

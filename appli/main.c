@@ -16,6 +16,7 @@
 #include "Abstract/Joystick/joystick.h"
 #include "tft_ili9341/stm32f1_ili9341.h"
 #include "Logical/type.h"
+#include "Logical/Logical.h"
 
 void writeLED(bool_e b)
 {
@@ -62,14 +63,21 @@ int main(void)
 	JOYSTICK_init();
 
 	ILI9341_Init();
-
+	initWALL();
 	/*--- TESTS ---*/
 	//JOYSTICK_test();
 
+
+
 	while(1)	//boucle de t�che de fond
 	{
-
-		ILI9341_DrawFilledRectangle(0,0,16,16,ILI9341_COLOR_GREEN2);
+		if(!t){
+			t=1000;
+			//mouvement(HAUT);
+			mouvement(JOYSTICK_getDirection(JOYSTICK1));
+		}
+		if(t==5000)
+			mouvement(DROITE);
 
 	}
 }
