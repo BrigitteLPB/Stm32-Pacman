@@ -35,7 +35,7 @@
 	}TFT_color_e;
 
 	// structure public
-	typedef int16_t position; // permet de changer rapidement le type des positions (notamment pour l'usingned)
+	typedef uint16_t position; // permet de changer rapidement le type des positions (notamment pour l'usingned)
 	typedef struct {
 		position	y;
 		position	x;
@@ -58,7 +58,7 @@
 		TFT_PORTRAIT_BAS	=	ILI9341_Orientation_Portrait_1,
 		TFT_PORTRAIT_HAUT	=	ILI9341_Orientation_Portrait_2,
 		TFT_LANDSCAPE_LEFT	=	ILI9341_Orientation_Landscape_2,
-		TFT_LANDSCAPE_RIGTH	=	ILI9341_Orientation_Portrait_1
+		TFT_LANDSCAPE_RIGTH	=	ILI9341_Orientation_Landscape_1
 	}TFT_orientation_e;
 
 
@@ -79,18 +79,25 @@
 	 * @brief			dessine l'objet
 	 * @param	objet	pointeur sur l'objet à dessiner
 	 */
-	void TFT_draw_object(const TFT_object_s *object);
+	void TFT_draw_object(TFT_object_s *object);
 
 	/**
 	 * @brief						nettoye l'objet
 	 * @param	objet				l'objet à nettoyer
 	 * @param	background_color	la couleur du fond
 	 */
-	void TFT_clean_object(const TFT_object_s *object, TFT_color_e background_color);
+	void TFT_clean_object(TFT_object_s *object, TFT_color_e background_color);
 
 	/**
 	 * @brief	test les fonctions de dessins bas level
 	 */
 	void TFT_test_basic(void);
+
+	/**
+	 * @brief	test l'affichage des triangles remplis
+	 * @param	lunch drawn
+	 * @pre		call regularly
+	 */
+	void TFT_test_triangles(bool_e drawn);
 
 #endif /* ABSTRACT_TFT_TFT_BASIC_H_ */

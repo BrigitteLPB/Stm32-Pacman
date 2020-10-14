@@ -14,6 +14,9 @@
 #include "systick.h"
 
 #include "Abstract/Joystick/joystick.h"
+#include "Abstract/TFT/TFT_basic.h"
+#include "Abstract/Button/button.h"
+
 
 #include "tft_ili9341/stm32f1_ili9341.h"
 
@@ -60,19 +63,33 @@ int main(void)
 	Systick_add_callback_function(&process_ms);
 
 	JOYSTICK_init();
+	TFT_init(TFT_LANDSCAPE_RIGTH);
+	BUTTON_init();
 
 	/*--- TESTS ---*/
-	JOYSTICK_test();
+//	JOYSTICK_test();
+//	TFT_test_basic();
+//	TFT_test_triangles();
 
-	ILI9341_DrawLine();
+	bool_e draw = FALSE;
+	bool_e pause = FALSE;
 
 	while(1)	//boucle de t�che de fond
 	{
-		if(!t)
-		{
-			t = 200;
-			HAL_GPIO_TogglePin(LED_GREEN_GPIO, LED_GREEN_PIN);
+		button_event_e event = BUTTON_state_machine();
+		if(event == BUTTON_EVENT_SHORT_PRESS){
+			pause = !pause;
 		}
 
+		if(!pause){
+			TFT_test_triangles(draw);
+			draw = FALSE;
+
+			if(!t)
+			{
+				t = 3000;
+				draw = TRUE;
+			}
+		}
 	}
 }
