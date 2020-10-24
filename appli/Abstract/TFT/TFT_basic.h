@@ -35,7 +35,7 @@
 	}TFT_color_e;
 
 	// structure public
-	typedef uint16_t position; // permet de changer rapidement le type des positions (notamment pour l'usingned)
+	typedef int16_t position; // permet de changer rapidement le type des positions (notamment pour l'usingned)
 	typedef struct {
 		position	y;
 		position	x;
@@ -87,6 +87,12 @@
 	 * @param	background_color	la couleur du fond
 	 */
 	void TFT_clean_object(TFT_object_s *object, TFT_color_e background_color);
+
+	/**
+	 * @brief	move the position of the object
+	 * @return	the object moved
+	 */
+	void TFT_move_object(TFT_object_s *object, position x_inc, position y_inc);
 
 	/**
 	 * @brief	test les fonctions de dessins bas level

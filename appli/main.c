@@ -17,8 +17,7 @@
 #include "Abstract/TFT/TFT_basic.h"
 #include "Abstract/Button/button.h"
 
-
-#include "tft_ili9341/stm32f1_ili9341.h"
+static void TEST_triangle();
 
 void writeLED(bool_e b)
 {
@@ -68,25 +67,36 @@ int main(void)
 
 	/*--- TESTS ---*/
 //	JOYSTICK_test();
-//	TFT_test_basic();
-//	TFT_test_triangles();
+	TFT_test_basic();
+//	TEST_triangle();
 
-	bool_e draw = FALSE;
-	bool_e pause = FALSE;
 
 	while(1)	//boucle de t�che de fond
 	{
-		button_event_e event = BUTTON_state_machine();
-		if(event == BUTTON_EVENT_SHORT_PRESS){
-			pause = !pause;
+		if(!t)
+		{
+			t = 1000;
+		}
+	}
+}
+
+void TEST_triangle(){
+	// init
+	bool_e draw = FALSE;
+	bool_e pause = FALSE;
+
+	while(TRUE){
+		TFT_test_triangles(draw);
+		draw = FALSE;
+
+		button_event_e click = BUTTON_state_machine();
+
+		if(click == BUTTON_EVENT_SHORT_PRESS || click == BUTTON_EVENT_LONG_PRESS){
+			pause = TRUE;
 		}
 
 		if(!pause){
-			TFT_test_triangles(draw);
-			draw = FALSE;
-
-			if(!t)
-			{
+			if(!t){
 				t = 3000;
 				draw = TRUE;
 			}

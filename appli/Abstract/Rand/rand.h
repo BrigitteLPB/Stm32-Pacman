@@ -15,7 +15,7 @@
 	// const
 	#define MAX_VALUES_COUNT	16		// max numbers catch
 
-	#define	ADC_RAND_PORT ADC_0			// the port used to generate rand
+	#define	ADC_RAND_PORT 		ADC_0	// the port used to generate rand
 	#define	ADC_REDUNDANCY_PORT ADC_1	// redundacy port used
 
 
@@ -30,8 +30,8 @@
 	 */
 	void RAND_catch_event(void);
 
-	uint8_t RAND_get(void);
 
+	uint8_t RAND_get(void);
 
 
 #endif /* ABSTRACT_RAND_RAND_H_ */

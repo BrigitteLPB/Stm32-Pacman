@@ -88,6 +88,13 @@ void TFT_draw_object(TFT_object_s *object){
 	}
 }
 
+void TFT_move_object(TFT_object_s *object, position x_inc, position y_inc){
+	for(int i = 0; i < object->nb_points; i++){
+		object->points[i].x = (position) (object->points[i].x + x_inc);
+		object->points[i].y = (position) (object->points[i].y + y_inc);
+	}
+}
+
 void TFT_clean_object(TFT_object_s *object, TFT_color_e background_color){
 	//init
 	TFT_object_s temp_object = *object;
@@ -150,6 +157,11 @@ void TFT_test_basic(void){
 	//code
 	TFT_draw_object(&object_1);
 	TFT_draw_object(&object_2);
+
+	TFT_move_object(&object_1, 50, 50);
+	object_1.color = COLOR_MAGENTA;
+	TFT_draw_object(&object_1);
+
 	TFT_draw_object(&line_1);
 	TFT_draw_object(&line_2);
 
