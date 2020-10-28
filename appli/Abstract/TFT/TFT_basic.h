@@ -8,6 +8,7 @@
 #ifndef ABSTRACT_TFT_TFT_BASIC_H_
 	#define ABSTRACT_TFT_TFT_BASIC_H_
 
+
 	// include
 	#include "macro_types.h"
 	#include "tft_ili9341/stm32f1_ili9341.h"
@@ -41,18 +42,14 @@
 		position	x;
 	}pos_s;
 
+
 	typedef struct {
 		pos_s 		points[MAX_NB_POINTS];
 		uint8_t		nb_points;
 		TFT_color_e	color;
 		bool_e		filled;
+		bool_e		circle;					// need 2 points : first -> center; second -> on circle (for radius)
 	}TFT_object_s;
-
-	typedef enum {
-		FONT_7x10,
-		FONT_11x18,
-		FONT_16x26
-	}text_size_e;
 
 	typedef enum{
 		TFT_PORTRAIT_BAS	=	ILI9341_Orientation_Portrait_1,
@@ -68,6 +65,11 @@
 	 * @param	orientation	the orientation of the screen (direction refered to the pins)
 	 */
 	void TFT_init(TFT_orientation_e orientation);
+
+	/**
+	 * @brief	fill the object with defaults values
+	 */
+	void TFT_init_object(TFT_object_s* object);
 
 	/**
 	 * @brief					efface l'écran avec la couleur choisie (attention l'opération est longue !)

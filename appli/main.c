@@ -15,7 +15,10 @@
 
 #include "Abstract/Joystick/joystick.h"
 #include "Abstract/TFT/TFT_basic.h"
+#include "Abstract/TFT/TFT_advanced.h"
 #include "Abstract/Button/button.h"
+
+#include "tft_ili9341/stm32f1_ili9341.h"
 
 static void TEST_triangle();
 
@@ -67,7 +70,8 @@ int main(void)
 
 	/*--- TESTS ---*/
 //	JOYSTICK_test();
-	TFT_test_basic();
+//	TFT_test_basic();
+	TFT_test_avanced();
 //	TEST_triangle();
 
 

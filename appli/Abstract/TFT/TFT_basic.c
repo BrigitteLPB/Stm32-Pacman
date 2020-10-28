@@ -6,6 +6,7 @@
 #include "TFT_basic.h"
 
 #include "../Rand/rand.h"
+#include "math.h"
 
 // const
 typedef struct {
@@ -35,6 +36,11 @@ static void PRIVATE_TFT_draw_object_line(TFT_object_s *object);
  * @param object	l'objet à dessiner
  */
 static void PRIVATE_TFT_draw_object_fill(TFT_object_s *object);
+
+/**
+ * @brief	make a circle
+ */
+static void PRIVATE_TFT_draw_circle(TFT_object_s* circle);
 
 /**
  * @brief	creer une equation de droite
@@ -69,6 +75,16 @@ void TFT_init(TFT_orientation_e orientation){
 	ILI9341_Rotate((ILI9341_Orientation_t) orientation);
 }
 
+void TFT_init_object(TFT_object_s* object){
+	for(int i=0; i < MAX_NB_POINTS; i++){
+		object->points[i] = (pos_s){0,0};
+	}
+	object->nb_points = 0;
+	object->color = COLOR_WHITE;
+	object->filled = FALSE;
+	object->circle = FALSE;
+}
+
 void TFT_clear(TFT_color_e background_color){
 	ILI9341_Fill((uint16_t) background_color);
 }
@@ -77,7 +93,9 @@ void TFT_draw_object(TFT_object_s *object){
 	//init
 
 	//code
-	if( object->nb_points == 0){
+	if(object->circle == TRUE && object->nb_points == 2){
+		PRIVATE_TFT_draw_circle(object);
+	}else if( object->nb_points == 0){
 		return;
 	}else{
 		if( object->filled ){
@@ -108,6 +126,7 @@ void TFT_clean_object(TFT_object_s *object, TFT_color_e background_color){
 void TFT_test_basic(void){
 	//init
 	TFT_object_s object_1;
+		TFT_init_object(&object_1);
 		object_1.color = COLOR_BLACK;
 		object_1.filled = TRUE;
 		object_1.points[0].x = 10;
@@ -123,6 +142,7 @@ void TFT_test_basic(void){
 		object_1.nb_points = 5;
 
 	TFT_object_s object_2;
+		TFT_init_object(&object_2);
 		object_2.color = COLOR_BLUE;
 		object_2.filled = FALSE;
 		object_2.points[0].x = 180;
@@ -138,6 +158,7 @@ void TFT_test_basic(void){
 		object_2.nb_points = 5;
 
 	TFT_object_s line_1;
+		TFT_init_object(&line_1);
 		line_1.color = COLOR_BLACK;
 		line_1.filled= FALSE;
 		line_1.nb_points = 2;
@@ -146,6 +167,7 @@ void TFT_test_basic(void){
 		line_1.points[1].x = ILI9341_HEIGHT;
 
 	TFT_object_s line_2;
+		TFT_init_object(&line_2);
 		line_2.color = COLOR_BLACK;
 		line_2.filled= FALSE;
 		line_2.nb_points = 2;
@@ -153,6 +175,14 @@ void TFT_test_basic(void){
 		line_2.points[0].x = ILI9341_HEIGHT;
 		line_2.points[1].y = ILI9341_WIDTH;
 		line_2.points[1].x = 0;
+
+	TFT_object_s circle_1;
+		TFT_init_object(&circle_1);
+		circle_1.color = COLOR_GREEN;
+		circle_1.filled = TRUE;
+		circle_1.nb_points = 2;
+		circle_1.points[0] = (pos_s){120, 120};
+		circle_1.points[1] = (pos_s){141, 141};		// radius of 30
 
 	//code
 	TFT_draw_object(&object_1);
@@ -178,10 +208,12 @@ void TFT_test_triangles(bool_e draw){
 		init = TRUE;
 		RAND_init();
 
+		TFT_init_object(&triangle);
 		triangle.color = COLOR_BLACK;
 		triangle.filled = TRUE;
 		triangle.nb_points = 3;
 
+		TFT_init_object(&point);
 		point.color = COLOR_BLUE;
 		point.filled = TRUE;
 		point.nb_points = 4;
@@ -232,11 +264,14 @@ void TFT_test_triangles(bool_e draw){
 
 		char x_str[15];
 		sprintf(x_str, "x:%.3d|%.3d|%.3d", A.x, B.x, C.x);
+#if USE_FONT11x18
 		ILI9341_Puts(0, 0, x_str, &Font_11x18, ILI9341_COLOR_BLUE, ILI9341_COLOR_WHITE);
-
+#endif
 		char y_str[15];
 		sprintf(y_str, "y:%.3d|%.3d|%.3d", A.y, B.y, C.y);
+#if USE_FONT11x18
 		ILI9341_Puts(0, 18, y_str, &Font_11x18, ILI9341_COLOR_BLUE, ILI9341_COLOR_WHITE);
+#endif
 	}
 }
 
@@ -405,3 +440,14 @@ void PRIVATE_TFT_draw_object_fill(TFT_object_s *object){
 		}
 	}
 }
+
+void PRIVATE_TFT_draw_circle(TFT_object_s* circle){
+	uint16_t radius = (uint16_t)(sqrt(pow(circle->points[0].x - circle->points[1].x, 2) + pow(circle->points[0].x - circle->points[1].x, 2)));
+
+	if(circle->filled){
+		ILI9341_DrawCircle((int16_t) circle->points[0].x, (int16_t) circle->points[0].y, (int16_t) radius, (uint16_t) circle->color);
+	}else{
+		ILI9341_DrawFilledCircle((int16_t) circle->points[0].x, (int16_t) circle->points[0].y, (int16_t) radius, (uint16_t) circle->color);
+	}
+}
+
