@@ -12,8 +12,8 @@
 	#include "stdbool.h"
 
 //IA state
-#define LENGTH 320
-#define HEIGHT 240
+	#define LENGTH 32
+	#define HEIGHT 24
 
 	typedef enum{
 		ALIVE,
