@@ -18,7 +18,7 @@
 #include "Abstract/TFT/TFT_advanced.h"
 #include "Abstract/Button/button.h"
 
-#include "tft_ili9341/stm32f1_ili9341.h"
+#include "Logical/type.h"
 
 static void TEST_triangle();
 
