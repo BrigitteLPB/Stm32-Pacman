@@ -8,6 +8,7 @@
 #ifndef ABSTRACT_TFT_TFT_BASIC_H_
 	#define ABSTRACT_TFT_TFT_BASIC_H_
 
+
 	// include
 	#include "macro_types.h"
 	#include "tft_ili9341/stm32f1_ili9341.h"
@@ -41,24 +42,20 @@
 		position	x;
 	}pos_s;
 
+
 	typedef struct {
 		pos_s 		points[MAX_NB_POINTS];
 		uint8_t		nb_points;
 		TFT_color_e	color;
 		bool_e		filled;
+		bool_e		circle;					// need 2 points : first -> center; second -> on circle (for radius)
 	}TFT_object_s;
-
-	typedef enum {
-		FONT_7x10,
-		FONT_11x18,
-		FONT_16x26
-	}text_size_e;
 
 	typedef enum{
 		TFT_PORTRAIT_BAS	=	ILI9341_Orientation_Portrait_1,
 		TFT_PORTRAIT_HAUT	=	ILI9341_Orientation_Portrait_2,
 		TFT_LANDSCAPE_LEFT	=	ILI9341_Orientation_Landscape_2,
-		TFT_LANDSCAPE_RIGTH	=	ILI9341_Orientation_Portrait_1
+		TFT_LANDSCAPE_RIGTH	=	ILI9341_Orientation_Landscape_1
 	}TFT_orientation_e;
 
 
@@ -70,6 +67,11 @@
 	void TFT_init(TFT_orientation_e orientation);
 
 	/**
+	 * @brief	fill the object with defaults values
+	 */
+	void TFT_init_object(TFT_object_s* object);
+
+	/**
 	 * @brief					efface l'écran avec la couleur choisie (attention l'opération est longue !)
 	 * @param	background_color	la couleur qui sera appliquer au fond lors de l'effacement
 	 */
@@ -79,18 +81,31 @@
 	 * @brief			dessine l'objet
 	 * @param	objet	pointeur sur l'objet à dessiner
 	 */
-	void TFT_draw_object(const TFT_object_s *object);
+	void TFT_draw_object(TFT_object_s *object);
 
 	/**
 	 * @brief						nettoye l'objet
 	 * @param	objet				l'objet à nettoyer
 	 * @param	background_color	la couleur du fond
 	 */
-	void TFT_clean_object(const TFT_object_s *object, TFT_color_e background_color);
+	void TFT_clean_object(TFT_object_s *object, TFT_color_e background_color);
+
+	/**
+	 * @brief	move the position of the object
+	 * @return	the object moved
+	 */
+	void TFT_move_object(TFT_object_s *object, position x_inc, position y_inc);
 
 	/**
 	 * @brief	test les fonctions de dessins bas level
 	 */
 	void TFT_test_basic(void);
+
+	/**
+	 * @brief	test l'affichage des triangles remplis
+	 * @param	lunch drawn
+	 * @pre		call regularly
+	 */
+	void TFT_test_triangles(bool_e drawn);
 
 #endif /* ABSTRACT_TFT_TFT_BASIC_H_ */
