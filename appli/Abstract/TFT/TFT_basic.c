@@ -1,37 +1,46 @@
 /**
  * @file	TFT_basic.c
- * @brief	définition des fonctions de dessin généraliser
- * @author	Théo GUILLEMAUD
+ * @brief	dÃ©finition des fonctions de dessin gÃ©nÃ©raliser
+ * @author	ThÃ©o GUILLEMAUD
  */
 #include "TFT_basic.h"
+
+#include "../Rand/rand.h"
+#include "math.h"
 
 // const
 typedef struct {
 	double	m;
-	uint16_t p;
+	int16_t p;
 	bool_e no_x;	// true si l'equation est du type x=c
 }droite_s;
 
-// prototype de fonction privé
+
+// prototype de fonction privÃ©
 /**
  * @brief			dessine un triangle rempli
  * @param	point_1	premier point
  * @param	point_2	second point
- * @param	point_3	troisième point
+ * @param	point_3	troisiÃ¨me point
  */
-static void PRIVATE_TFT_draw_filled_triangle(const pos_s *point_1, const pos_s *point_2, const pos_s *point_3, TFT_color_e color);
+static void PRIVATE_TFT_draw_filled_triangle(pos_s *point_1, pos_s *point_2, pos_s *point_3, TFT_color_e color);
 
 /**
  * @brief			dessine l'objet avec des lignes
- * @param object	l'objet à dessiner
+ * @param object	l'objet Ã  dessiner
  */
-static void PRIVATE_TFT_draw_object_line(const TFT_object_s *object);
+static void PRIVATE_TFT_draw_object_line(TFT_object_s *object);
 
 /**
  * @brief			dessine l'objet avec des lignes
- * @param object	l'objet à dessiner
+ * @param object	l'objet Ã  dessiner
  */
-static void PRIVATE_TFT_draw_object_fill(const TFT_object_s *object);
+static void PRIVATE_TFT_draw_object_fill(TFT_object_s *object);
+
+/**
+ * @brief	make a circle
+ */
+static void PRIVATE_TFT_draw_circle(TFT_object_s* circle);
 
 /**
  * @brief	creer une equation de droite
@@ -43,13 +52,22 @@ static droite_s PRIVATE_TFT_find_straigth_line(pos_s *A, pos_s *B);
 /**
  * @brief	trouve le point milieu entre les 3 points selon le x
  */
-static pos_s* PRIVATE_TFT_find_middle(pos_s *A, pos_s *B, pos_s *C);
+static void PRIVATE_TFT_find_middle(pos_s *A, pos_s *B, pos_s *C, pos_s** middle, pos_s** left, pos_s** rigth);
 
 /***
- * @brief	trouve la droite où ne passe pas le sommet
+ * @brief	trouve la droite oÃ¹ ne passe pas le sommet
  */
 static droite_s* PRIVATE_TFT_find_base(droite_s *d1, droite_s *d2, droite_s *d3, pos_s *sommet);
 
+/**
+ * @breif	trouve la droite qui ne passe pas par le sommet
+ */
+static droite_s* PRIVATE_TFT_find_base(droite_s *d1, droite_s *d2, droite_s *d3, pos_s *sommet);
+
+/**
+ * @brief	calcul le y pour un x et une droite donnÃ©
+ */
+static position PRIVATE_TFT_compute_straigth(droite_s *d, position x);
 
 // fonction
 void TFT_init(TFT_orientation_e orientation){
@@ -57,15 +75,27 @@ void TFT_init(TFT_orientation_e orientation){
 	ILI9341_Rotate((ILI9341_Orientation_t) orientation);
 }
 
+void TFT_init_object(TFT_object_s* object){
+	for(int i=0; i < MAX_NB_POINTS; i++){
+		object->points[i] = (pos_s){0,0};
+	}
+	object->nb_points = 0;
+	object->color = COLOR_WHITE;
+	object->filled = FALSE;
+	object->circle = FALSE;
+}
+
 void TFT_clear(TFT_color_e background_color){
 	ILI9341_Fill((uint16_t) background_color);
 }
 
-void TFT_draw_object(const TFT_object_s *object){
+void TFT_draw_object(TFT_object_s *object){
 	//init
 
 	//code
-	if( object->nb_points == 0){
+	if(object->circle == TRUE && object->nb_points == 2){
+		PRIVATE_TFT_draw_circle(object);
+	}else if( object->nb_points == 0){
 		return;
 	}else{
 		if( object->filled ){
@@ -76,7 +106,14 @@ void TFT_draw_object(const TFT_object_s *object){
 	}
 }
 
-void TFT_clean_object(const TFT_object_s *object, TFT_color_e background_color){
+void TFT_move_object(TFT_object_s *object, position x_inc, position y_inc){
+	for(int i = 0; i < object->nb_points; i++){
+		object->points[i].x = (position) (object->points[i].x + x_inc);
+		object->points[i].y = (position) (object->points[i].y + y_inc);
+	}
+}
+
+void TFT_clean_object(TFT_object_s *object, TFT_color_e background_color){
 	//init
 	TFT_object_s temp_object = *object;
 	temp_object.filled = TRUE;
@@ -89,6 +126,7 @@ void TFT_clean_object(const TFT_object_s *object, TFT_color_e background_color){
 void TFT_test_basic(void){
 	//init
 	TFT_object_s object_1;
+		TFT_init_object(&object_1);
 		object_1.color = COLOR_BLACK;
 		object_1.filled = TRUE;
 		object_1.points[0].x = 10;
@@ -104,6 +142,7 @@ void TFT_test_basic(void){
 		object_1.nb_points = 5;
 
 	TFT_object_s object_2;
+		TFT_init_object(&object_2);
 		object_2.color = COLOR_BLUE;
 		object_2.filled = FALSE;
 		object_2.points[0].x = 180;
@@ -119,6 +158,7 @@ void TFT_test_basic(void){
 		object_2.nb_points = 5;
 
 	TFT_object_s line_1;
+		TFT_init_object(&line_1);
 		line_1.color = COLOR_BLACK;
 		line_1.filled= FALSE;
 		line_1.nb_points = 2;
@@ -127,6 +167,7 @@ void TFT_test_basic(void){
 		line_1.points[1].x = ILI9341_HEIGHT;
 
 	TFT_object_s line_2;
+		TFT_init_object(&line_2);
 		line_2.color = COLOR_BLACK;
 		line_2.filled= FALSE;
 		line_2.nb_points = 2;
@@ -135,30 +176,156 @@ void TFT_test_basic(void){
 		line_2.points[1].y = ILI9341_WIDTH;
 		line_2.points[1].x = 0;
 
+	TFT_object_s circle_1;
+		TFT_init_object(&circle_1);
+		circle_1.color = COLOR_GREEN;
+		circle_1.filled = TRUE;
+		circle_1.nb_points = 2;
+		circle_1.points[0] = (pos_s){120, 120};
+		circle_1.points[1] = (pos_s){141, 141};		// radius of 30
+
 	//code
 	TFT_draw_object(&object_1);
 	TFT_draw_object(&object_2);
+
+	TFT_move_object(&object_1, 50, 50);
+	object_1.color = COLOR_MAGENTA;
+	TFT_draw_object(&object_1);
+
 	TFT_draw_object(&line_1);
 	TFT_draw_object(&line_2);
 
 }
 
-void PRIVATE_TFT_draw_filled_triangle(const pos_s *A, const pos_s *B, const pos_s *C, TFT_color_e color){
-	// les triangles ne seront pas remplis car la technique est trop dure
+void TFT_test_triangles(bool_e draw){
+	static bool_e init = FALSE;
+	static TFT_object_s triangle;
+	static TFT_object_s point;
 
+	static const uint8_t size_square = 5;
+
+	if(!init){
+		init = TRUE;
+		RAND_init();
+
+		TFT_init_object(&triangle);
+		triangle.color = COLOR_BLACK;
+		triangle.filled = TRUE;
+		triangle.nb_points = 3;
+
+		TFT_init_object(&point);
+		point.color = COLOR_BLUE;
+		point.filled = TRUE;
+		point.nb_points = 4;
+	}
+
+	// catch event
+	RAND_catch_event();
+
+	if(draw){
+		TFT_clear(COLOR_WHITE);
+
+		pos_s A = (pos_s){(position) (RAND_get()%TFT_WIDTH), (position) (RAND_get()%TFT_HEIGHT)};
+		pos_s B = (pos_s){(position) (RAND_get()%TFT_WIDTH), (position) (RAND_get()%TFT_HEIGHT)};
+		pos_s C = (pos_s){(position) (RAND_get()%TFT_WIDTH), (position) (RAND_get()%TFT_HEIGHT)};
+
+		// triangle
+		triangle.points[0] = A;
+		triangle.points[1] = B;
+		triangle.points[2] = C;
+
+		// point bleu
+		pos_s *points[] = {&A, &B, &C};
+
+		for(uint8_t i = 0; i<3; i++){
+			position y_moins = (position) ((points[i]->y - size_square < 0)? 0 : points[i]->y - size_square);
+			position x_moins = (position) ((points[i]->x - size_square < 0)? 0 : points[i]->x - size_square);
+
+			position y_plus = (position) ((points[i]->y + size_square > TFT_WIDTH)? TFT_WIDTH : points[i]->y + size_square);
+			position x_plus = (position) ((points[i]->x + size_square > TFT_HEIGHT)? TFT_HEIGHT : points[i]->x + size_square);
+
+			point.points[0].y = y_moins;
+			point.points[0].x = x_moins;
+
+			point.points[1].y = y_moins;
+			point.points[1].x = x_plus;
+
+			point.points[2].y = y_plus;
+			point.points[2].x = x_plus;
+
+			point.points[3].y = y_plus;
+			point.points[3].x = x_moins;
+
+			TFT_draw_object(&point);
+
+		}
+
+		TFT_draw_object(&triangle);
+
+		char x_str[15];
+		sprintf(x_str, "x:%.3d|%.3d|%.3d", A.x, B.x, C.x);
+#if USE_FONT11x18
+		ILI9341_Puts(0, 0, x_str, &Font_11x18, ILI9341_COLOR_BLUE, ILI9341_COLOR_WHITE);
+#endif
+		char y_str[15];
+		sprintf(y_str, "y:%.3d|%.3d|%.3d", A.y, B.y, C.y);
+#if USE_FONT11x18
+		ILI9341_Puts(0, 18, y_str, &Font_11x18, ILI9341_COLOR_BLUE, ILI9341_COLOR_WHITE);
+#endif
+	}
+}
+
+void PRIVATE_TFT_draw_filled_triangle(pos_s *A, pos_s *B, pos_s *C, TFT_color_e color){
 	// init
-	const pos_s *points[] = {A, B, C};
-
 	droite_s dAB = PRIVATE_TFT_find_straigth_line(A, B);
 	droite_s dBC = PRIVATE_TFT_find_straigth_line(B, C);
 	droite_s dCA = PRIVATE_TFT_find_straigth_line(C, A);
+  
+	pos_s *point_milieu = NULL, *point_left = NULL, *point_rigth = NULL;
+	PRIVATE_TFT_find_middle(A, B, C, &point_milieu, &point_left, &point_rigth);
+	droite_s* base = PRIVATE_TFT_find_base(&dAB, &dBC, &dCA, point_milieu);
+	droite_s* rigth = PRIVATE_TFT_find_base(&dAB, &dBC, &dCA, point_left); // on change de point de vue
+	droite_s* left = PRIVATE_TFT_find_base(&dAB, &dBC, &dCA, point_rigth); // et on rechange de point de vue
 
-	pos_s *point_milieu = PRIVATE_TFT_find_middle(A, B, C);
-	droite_s *base =
+	// creation d'une ligne temporaire
+	TFT_object_s line;
+	line.color = color;
+	line.filled = FALSE;
+	line.nb_points = 2;
 
 	//code
+		// left
+	if(left->no_x){
+		line.points[0] = *point_left;
+		line.points[1] = *point_milieu;
+		PRIVATE_TFT_draw_object_line(&line);
+	}else{
+		for(position i = point_left->x; i < point_milieu->x; i++){
+			line.points[0] = (pos_s){PRIVATE_TFT_compute_straigth(left, i), i}; // droite left
+			line.points[1] = (pos_s){PRIVATE_TFT_compute_straigth(base, i), i}; // droite base
+			PRIVATE_TFT_draw_object_line(&line);
+		}
+	}
+		// rigth and middle
+	if(rigth->no_x){
+		line.points[0] = *point_rigth;
+		line.points[1] = *point_milieu;
+		PRIVATE_TFT_draw_object_line(&line);
+	}else{
+		for(position i = point_milieu->x; i <= point_rigth->x; i++){
+			line.points[0] = (pos_s){PRIVATE_TFT_compute_straigth(rigth, i), i}; // droite rigth
+			line.points[1] = (pos_s){PRIVATE_TFT_compute_straigth(base, i), i}; // droite base
+			PRIVATE_TFT_draw_object_line(&line);
+		}
+	}
 
-
+	// finish with borders
+	pos_s *points[3] = {A, B, C};
+	for(uint8_t i =0; i<3; i++){
+		line.points[0] = *points[i];
+		line.points[1] = *points[(i+1)%3];
+		PRIVATE_TFT_draw_object_line(&line);
+	}
 }
 
 droite_s PRIVATE_TFT_find_straigth_line(pos_s *A, pos_s *B){
@@ -171,17 +338,21 @@ droite_s PRIVATE_TFT_find_straigth_line(pos_s *A, pos_s *B){
 		droite.m = 0;
 		droite.p = 0;
 	}else{
-		droite.m = (B->y - A->y)/(B->x - A->x);		// m = (yB-yA)/(xB-xA)
-		droite.p = A->y - (droite.m * A->x);		// p = yA - m*xA
+		droite.m = (double)(B->y - A->y)/(double)(B->x - A->x);		// m = (yB-yA)/(xB-xA)
+		droite.p = (int16_t) (A->y - (droite.m * A->x));			// p = yA - m*xA
+		droite.no_x = FALSE;
 	}
 
 	// end
 	return droite;
 }
 
-position PRIVATE_TFT_compute_straigth
+position PRIVATE_TFT_compute_straigth(droite_s *d, position x){
+	position temp = (position) (d->m * x + d->p);
+	return temp;
+}
 
-pos_s* PRIVATE_TFT_find_middle(pos_s *A, pos_s *B, pos_s *C){
+void PRIVATE_TFT_find_middle(pos_s *A, pos_s *B, pos_s *C, pos_s** middle, pos_s** left, pos_s** rigth){
 	// init
 	position min = MIN(MIN(A->x, B->x), C->x);
 	position max = MAX(MAX(A->x, B->x), C->x);
@@ -190,17 +361,48 @@ pos_s* PRIVATE_TFT_find_middle(pos_s *A, pos_s *B, pos_s *C){
 
 	// code
 	for(int i=0; i<3; i++){
-		if(points[i]->x != min && points[i]->x != max){
-			return points[i];
+		if(points[i]->x == min && *left == NULL){
+			*left = points[i];
+		}else if(points[i]->x == max && *rigth == NULL){
+			*rigth = points[i];
+		}else{
+			*middle = points[i];
 		}
+
 	}
 }
 
 droite_s* PRIVATE_TFT_find_base(droite_s *d1, droite_s *d2, droite_s *d3, pos_s *sommet){
+	position y1 = PRIVATE_TFT_compute_straigth(d1, sommet->x);
+	position y2 = PRIVATE_TFT_compute_straigth(d2, sommet->x);
+	position y3 = PRIVATE_TFT_compute_straigth(d3, sommet->x);
 
+	// check
+	if(y1 == 0 && d1->no_x == TRUE && y2 != y3){
+		y1 = sommet->y;
+	}
+	if(y2 == 0 && d2->no_x == TRUE && y1 != y3){
+		y2 = sommet->y;
+	}
+	if(y3 == 0 && d3->no_x == TRUE && y1 != y2){
+		y3 = sommet->y;
+	}
+
+	if(absolute(y2 - sommet->y) <= 1 && absolute(y3 - sommet->y) <= 1){
+		return d1;
+	}
+	if(absolute(y1 - sommet->y) <= 1 && absolute(y3 - sommet->y) <= 1){
+		return d2;
+	}
+	if(absolute(y1 - sommet->y) <= 1 && absolute(y2 - sommet->y) <= 1){
+		return d3;
+	}
+
+	// lÃ  c'est la merde
+	return NULL;
 }
 
-void PRIVATE_TFT_draw_object_line(const TFT_object_s *object){
+void PRIVATE_TFT_draw_object_line(TFT_object_s *object){
 	// init
 
 	//code
@@ -208,7 +410,7 @@ void PRIVATE_TFT_draw_object_line(const TFT_object_s *object){
 		ILI9341_DrawPixel((uint16_t) object->points[0].x, (uint16_t) object->points[0].y, object->color);
 	}else{
 		for(int i = 0; i < object->nb_points; i++){
-//			ASSERT_T(i == object->nb_points, "L'indice a dépassé la taille du tableau de points d'objet");
+//			ASSERT_T(i == object->nb_points, "L'indice a dÃ©passÃ© la taille du tableau de points d'objet");
 			ILI9341_DrawLine(
 					(uint16_t) object->points[i].x,
 					(uint16_t) object->points[i].y,
@@ -220,7 +422,7 @@ void PRIVATE_TFT_draw_object_line(const TFT_object_s *object){
 	}
 }
 
-void PRIVATE_TFT_draw_object_fill(const TFT_object_s *object){
+void PRIVATE_TFT_draw_object_fill(TFT_object_s *object){
 	// init
 
 	//code
@@ -228,7 +430,7 @@ void PRIVATE_TFT_draw_object_fill(const TFT_object_s *object){
 		PRIVATE_TFT_draw_object_line(object);
 	}else{
 		for(int i = 1; i < object->nb_points - 1; i++){
-//			ASSERT_T(i == object->nb_points, "L'indice a dépassé la taille du tableau de points d'objet");
+//			ASSERT_T(i == object->nb_points, "L'indice a dÃ©passÃ© la taille du tableau de points d'objet");
 			PRIVATE_TFT_draw_filled_triangle(
 					&object->points[0],
 					&object->points[i],
@@ -236,6 +438,16 @@ void PRIVATE_TFT_draw_object_fill(const TFT_object_s *object){
 					object->color
 			);
 		}
+	}
+}
+
+void PRIVATE_TFT_draw_circle(TFT_object_s* circle){
+	uint16_t radius = (uint16_t)(sqrt(pow(circle->points[0].x - circle->points[1].x, 2) + pow(circle->points[0].x - circle->points[1].x, 2)));
+
+	if(circle->filled){
+		ILI9341_DrawCircle((int16_t) circle->points[0].x, (int16_t) circle->points[0].y, (int16_t) radius, (uint16_t) circle->color);
+	}else{
+		ILI9341_DrawFilledCircle((int16_t) circle->points[0].x, (int16_t) circle->points[0].y, (int16_t) radius, (uint16_t) circle->color);
 	}
 }
 

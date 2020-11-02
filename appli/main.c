@@ -14,8 +14,14 @@
 #include "systick.h"
 
 #include "Abstract/Joystick/joystick.h"
+#include "Abstract/TFT/TFT_basic.h"
+#include "Abstract/TFT/TFT_advanced.h"
+#include "Abstract/Button/button.h"
+
 #include "tft_ili9341/stm32f1_ili9341.h"
 #include "Logical/type.h"
+
+static void TEST_triangle();
 
 void writeLED(bool_e b)
 {
@@ -60,26 +66,45 @@ int main(void)
 	Systick_add_callback_function(&process_ms);
 
 	JOYSTICK_init();
-
-	ILI9341_Init();
+	TFT_init(TFT_LANDSCAPE_RIGTH);
+	BUTTON_init();
 
 	/*--- TESTS ---*/
-	//JOYSTICK_test();
-	for(int i=0;i<LENGTH;i++){
-		for(int j=0;j<HEIGHT;j++){
-			if (i<17 ||  j<17){
-				ILI9341_DrawPixel(i,j,ILI9341_COLOR_RED);
-			}
-			else if(i>313 ||j>223){
-				ILI9341_DrawPixel(i,j,ILI9341_COLOR_RED);
-			}
-		}
-	}
+//	JOYSTICK_test();
+//	TFT_test_basic();
+	TFT_test_avanced();
+//	TEST_triangle();
+
 
 	while(1)	//boucle de t�che de fond
 	{
+		if(!t)
+		{
+			t = 1000;
+		}
+	}
+}
 
-		ILI9341_DrawFilledRectangle(0,0,16,16,ILI9341_COLOR_GREEN2);
+void TEST_triangle(){
+	// init
+	bool_e draw = FALSE;
+	bool_e pause = FALSE;
 
+	while(TRUE){
+		TFT_test_triangles(draw);
+		draw = FALSE;
+
+		button_event_e click = BUTTON_state_machine();
+
+		if(click == BUTTON_EVENT_SHORT_PRESS || click == BUTTON_EVENT_LONG_PRESS){
+			pause = TRUE;
+		}
+
+		if(!pause){
+			if(!t){
+				t = 3000;
+				draw = TRUE;
+			}
+		}
 	}
 }
