@@ -1,7 +1,7 @@
 /**
  * @file	TFT_basic.c
- * @brief	définition des fonctions de dessin généraliser
- * @author	Théo GUILLEMAUD
+ * @brief	dÃ©finition des fonctions de dessin gÃ©nÃ©raliser
+ * @author	ThÃ©o GUILLEMAUD
  */
 #include "TFT_basic.h"
 
@@ -16,24 +16,24 @@ typedef struct {
 }droite_s;
 
 
-// prototype de fonction privé
+// prototype de fonction privÃ©
 /**
  * @brief			dessine un triangle rempli
  * @param	point_1	premier point
  * @param	point_2	second point
- * @param	point_3	troisième point
+ * @param	point_3	troisiÃ¨me point
  */
 static void PRIVATE_TFT_draw_filled_triangle(pos_s *point_1, pos_s *point_2, pos_s *point_3, TFT_color_e color);
 
 /**
  * @brief			dessine l'objet avec des lignes
- * @param object	l'objet à dessiner
+ * @param object	l'objet Ã  dessiner
  */
 static void PRIVATE_TFT_draw_object_line(TFT_object_s *object);
 
 /**
  * @brief			dessine l'objet avec des lignes
- * @param object	l'objet à dessiner
+ * @param object	l'objet Ã  dessiner
  */
 static void PRIVATE_TFT_draw_object_fill(TFT_object_s *object);
 
@@ -55,7 +55,7 @@ static droite_s PRIVATE_TFT_find_straigth_line(pos_s *A, pos_s *B);
 static void PRIVATE_TFT_find_middle(pos_s *A, pos_s *B, pos_s *C, pos_s** middle, pos_s** left, pos_s** rigth);
 
 /***
- * @brief	trouve la droite où ne passe pas le sommet
+ * @brief	trouve la droite oÃ¹ ne passe pas le sommet
  */
 static droite_s* PRIVATE_TFT_find_base(droite_s *d1, droite_s *d2, droite_s *d3, pos_s *sommet);
 
@@ -65,7 +65,7 @@ static droite_s* PRIVATE_TFT_find_base(droite_s *d1, droite_s *d2, droite_s *d3,
 static droite_s* PRIVATE_TFT_find_base(droite_s *d1, droite_s *d2, droite_s *d3, pos_s *sommet);
 
 /**
- * @brief	calcul le y pour un x et une droite donné
+ * @brief	calcul le y pour un x et une droite donnÃ©
  */
 static position PRIVATE_TFT_compute_straigth(droite_s *d, position x);
 
@@ -280,7 +280,7 @@ void PRIVATE_TFT_draw_filled_triangle(pos_s *A, pos_s *B, pos_s *C, TFT_color_e 
 	droite_s dAB = PRIVATE_TFT_find_straigth_line(A, B);
 	droite_s dBC = PRIVATE_TFT_find_straigth_line(B, C);
 	droite_s dCA = PRIVATE_TFT_find_straigth_line(C, A);
-
+  
 	pos_s *point_milieu = NULL, *point_left = NULL, *point_rigth = NULL;
 	PRIVATE_TFT_find_middle(A, B, C, &point_milieu, &point_left, &point_rigth);
 	droite_s* base = PRIVATE_TFT_find_base(&dAB, &dBC, &dCA, point_milieu);
@@ -398,7 +398,7 @@ droite_s* PRIVATE_TFT_find_base(droite_s *d1, droite_s *d2, droite_s *d3, pos_s 
 		return d3;
 	}
 
-	// là c'est la merde
+	// lÃ  c'est la merde
 	return NULL;
 }
 
@@ -410,7 +410,7 @@ void PRIVATE_TFT_draw_object_line(TFT_object_s *object){
 		ILI9341_DrawPixel((uint16_t) object->points[0].x, (uint16_t) object->points[0].y, object->color);
 	}else{
 		for(int i = 0; i < object->nb_points; i++){
-//			ASSERT_T(i == object->nb_points, "L'indice a dépassé la taille du tableau de points d'objet");
+//			ASSERT_T(i == object->nb_points, "L'indice a dÃ©passÃ© la taille du tableau de points d'objet");
 			ILI9341_DrawLine(
 					(uint16_t) object->points[i].x,
 					(uint16_t) object->points[i].y,
@@ -430,7 +430,7 @@ void PRIVATE_TFT_draw_object_fill(TFT_object_s *object){
 		PRIVATE_TFT_draw_object_line(object);
 	}else{
 		for(int i = 1; i < object->nb_points - 1; i++){
-//			ASSERT_T(i == object->nb_points, "L'indice a dépassé la taille du tableau de points d'objet");
+//			ASSERT_T(i == object->nb_points, "L'indice a dÃ©passÃ© la taille du tableau de points d'objet");
 			PRIVATE_TFT_draw_filled_triangle(
 					&object->points[0],
 					&object->points[i],
