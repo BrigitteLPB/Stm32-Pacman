@@ -14,7 +14,7 @@
 	#include "tft_ili9341/stm32f1_ili9341.h"
 
 	// const
-	#define MAX_NB_POINTS		8				// nombre de points maximum par objet
+	#define MAX_NB_POINTS		10				// nombre de points maximum par objet
 	#define TFT_HEIGHT			ILI9341_HEIGHT	// hauteur de l'écran
 	#define	TFT_WIDTH			ILI9341_WIDTH	// largeur de l'écran
 

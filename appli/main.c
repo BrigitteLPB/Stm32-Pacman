@@ -18,6 +18,8 @@
 #include "Abstract/TFT/TFT_advanced.h"
 #include "Abstract/Button/button.h"
 
+#include "Display/Renderer/renderer.h"
+
 #include "Logical/type.h"
 
 static void TEST_triangle();
@@ -67,12 +69,14 @@ int main(void)
 	JOYSTICK_init();
 	TFT_init(TFT_LANDSCAPE_RIGTH);
 	BUTTON_init();
+	RENDERER_init();
 
 	/*--- TESTS ---*/
 //	JOYSTICK_test();
 //	TFT_test_basic();
-	TFT_test_avanced();
+//	TFT_test_avanced();
 //	TEST_triangle();
+	RENDERER_test();
 
 
 	while(1)	//boucle de t�che de fond
