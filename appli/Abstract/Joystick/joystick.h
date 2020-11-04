@@ -10,7 +10,7 @@
 	#include "stm32f1_adc.h"
 
 	// const
-	#define X1 ADC_1	//joystick nè1
+	#define X1 ADC_1	//joystick n1
 	#define Y1 ADC_0
 	#define X2 ADC_9	//joystick n2
 	#define Y2 ADC_8

@@ -73,11 +73,12 @@ int main(void)
 	{
 		if(!t){
 			t=1000;
-			//mouvement(HAUT);
 			mouvement(JOYSTICK_getDirection(JOYSTICK1));
+			fantome_mvt();
 		}
-		if(t==5000)
-			mouvement(DROITE);
+/*		if(!t){
+			t=1000;
 
+		}*/
 	}
 }

@@ -18,6 +18,7 @@
 
 void mouvement(JOYSTICK_direction direction);
 void initWALL();
+void fantome_mvt();
 
 
 #endif /* LOGICAL_LOGICAL_H_ */

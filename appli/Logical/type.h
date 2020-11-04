@@ -31,7 +31,9 @@
 		WALL,		//cell where we have a wall
 		WALL_WITH_PHANTOM,	// phantom spawn area
 		FREE,		//cell with nothing on it
-		OBJECT		//cell with a point on it
+		OBJECT,	//cell with a point on it
+		PACMAN,
+		FANTOME
 	}type_cell;
 
 	typedef struct {
@@ -40,17 +42,9 @@
 	}cell_s;
 
 	// object / caracter
-	typedef enum{		//OBJECT
-		PACMAN,
-		PHANTOM,
-		GUMBALL,
-		CHERRY,
-		POINT
-	}type_object;
 
 	typedef struct {
 		void* data;
-		type_object type;
 	}object_s;
 
 // ojects
