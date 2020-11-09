@@ -213,8 +213,6 @@ void initWALL(){
 		game.map[LENGTH-1][i].type = WALL;
 		ILI9341_DrawFilledRectangle((uint16_t)(0),(uint16_t)(i*10),(uint16_t)(10),(uint16_t)((i+1)*10),ILI9341_COLOR_BLUE);
 	}
-
-
 }
 
 bool getWALL(int x, int y){

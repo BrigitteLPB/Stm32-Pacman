@@ -28,7 +28,7 @@ static volatile bool FLAG_1S = false;
 		int16_t Y_value = ADC_getValue(X)-MILIEU;
 		printf("X value : %d\n",X_value);
 		printf("Y value : %d\n",Y_value);
-		if (Y_value<TOLERANCE_MAX && abs(X_value)<=abs(Y_value)){
+		if (Y_value<TOLERANCE_MIN && abs(Y_value)>abs(X_value)){
 			return BAS;
 		}
 		else if (X_value>TOLERANCE_MAX && abs(Y_value)<abs(X_value)){
