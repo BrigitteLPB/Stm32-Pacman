@@ -215,6 +215,103 @@ void initWALL(){
 	}
 }
 
+void initMAP(){
+	game.map[1][5].type = WALL;
+	game.map[1][18].type = WALL;
+	game.map[30][5].type = WALL;
+	game.map[30][18].type = WALL;
+	for(int i=2;i<4;i++){					//carré
+		game.map[i][i].type = WALL;
+		game.map[i+26][i].type = WALL;
+		game.map[i][i+19].type = WALL;
+		game.map[i+26][i+19].type = WALL;
+		game.map[i+13][i+6].type = WALL;
+		game.map[i+13][i+12].type = WALL;
+	}
+	for(int y=7;y<17;y++){					//colonne de 10
+		game.map[2][y].type = WALL;
+		game.map[29][y].type = WALL;
+	}
+	for(int i=0;i<7;i++){					//longueur de 6
+		game.map[i+13][2].type = WALL;
+		game.map[i+13][29].type = WALL;
+
+		game.map[13][i+4].type = WALL;
+		game.map[13][i+14].type = WALL;
+		game.map[18][i+4].type = WALL;
+		game.map[18][i+14].type = WALL;
+
+		game.map[8][i+9].type = WALL;
+		game.map[23][i+9].type = WALL;
+	}
+	for(int i=0;i<4;i++){					//longueur de 4
+		game.map[i+3][5].type = WALL;
+		game.map[i+3][11].type = WALL;
+		game.map[i+3][12].type = WALL;
+		game.map[i+3][18].type = WALL;
+		game.map[i+25][5].type = WALL;
+		game.map[i+25][11].type = WALL;
+		game.map[i+25][12].type = WALL;
+		game.map[i+25][18].type = WALL;
+
+		game.map[i+8][2].type = WALL;
+		game.map[i+20][2].type = WALL;
+		game.map[i+8][29].type = WALL;
+		game.map[i+20][29].type = WALL;
+
+		game.map[i+10][4].type = WALL;
+		game.map[i+18][4].type = WALL;
+		game.map[i+10][27].type = WALL;
+		game.map[i+18][27].type = WALL;
+	}
+	for(int i=0;i<3;i++){					//longueur de 3
+		game.map[5][i+1].type = WALL;
+		game.map[6][i+1].type = WALL;
+		game.map[25][i+1].type = WALL;
+		game.map[26][i+1].type = WALL;
+
+		game.map[5][i+28].type = WALL;
+		game.map[6][i+28].type = WALL;
+		game.map[25][i+28].type = WALL;
+		game.map[26][i+28].type = WALL;
+
+		game.map[8][i+3].type = WALL;
+		game.map[23][i+3].type = WALL;
+		game.map[8][i+18].type = WALL;
+		game.map[23][i+18].type = WALL;
+
+		game.map[15][i+4].type = WALL;
+		game.map[16][i+4].type = WALL;
+		game.map[15][i+17].type = WALL;
+		game.map[16][i+17].type = WALL;
+
+		game.map[12][i+8].type = WALL;
+		game.map[18][i+8].type = WALL;
+		game.map[12][i+13].type = WALL;
+		game.map[18][i+13].type = WALL;
+
+		game.map[4][i+7].type = WALL;
+		game.map[6][i+7].type = WALL;
+		game.map[25][i+7].type = WALL;
+		game.map[27][i+7].type = WALL;
+		game.map[4][i+14].type = WALL;
+		game.map[6][i+14].type = WALL;
+		game.map[25][i+14].type = WALL;
+		game.map[27][i+14].type = WALL;
+	}
+	for(int i=0;i<2;i++){					//longueur de 2
+		game.map[i+9][9].type = WALL;
+		game.map[i+21][9].type = WALL;
+		game.map[i+9][14].type = WALL;
+		game.map[i+21][14].type = WALL;
+
+		game.map[i+9][7].type = WALL;
+		game.map[i+10][6].type = WALL;
+		game.map[i+20][17].type = WALL;
+		game.map[i+21][16].type = WALL;
+	}
+}
+
 bool getWALL(int x, int y){
 	if(game.map[x][y].type == WALL || game.map[x][y].type == WALL_WITH_PHANTOM){
 		return true;
