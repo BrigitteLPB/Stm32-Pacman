@@ -10,8 +10,8 @@
 #include "stm32f1xx_hal.h"
 
 //Choix de la cible utilisée.
-#define NUCLEO	1
-#define BLUEPILL 0
+#define NUCLEO	0
+#define BLUEPILL 1
 
 
 #define TRACE	0		//permet le débogage sur un simulateur QEMU. Doit rester à 0 par défaut.
@@ -66,7 +66,7 @@
 #define USE_BSP_TIMER			0 //Utilisation de stm32f1_timer.c/h
 
 
-#define USE_ADC					0
+#define USE_ADC					1
 	//Ces configurations permettent d'activer les entrées analogiques souhaitées.
 	//16 entrées analogiques peuvent être activées maximum.
 	//2 entrées analogiques doivent être activées minimum. (Vref est un choix possible si vous utilisez une seule entrée)
@@ -78,8 +78,8 @@
 	#define USE_AN5			0	//Broche correspondante : PA5
 	#define USE_AN6			0	//Broche correspondante : PA6
 	#define USE_AN7			0	//Broche correspondante : PA7
-	#define USE_AN8			0	//Broche correspondante : PB0
-	#define USE_AN9			0	//Broche correspondante : PB1
+	#define USE_AN8			1	//Broche correspondante : PB0
+	#define USE_AN9			1	//Broche correspondante : PB1
 	#define USE_AN10		0	//Broche correspondante : PC0	//Sur la Bluepill, cette broche n'est pas câblée !
 	#define USE_AN11		0	//Broche correspondante : PC1	//Sur la Bluepill, cette broche n'est pas câblée !
 	#define USE_AN12		0	//Broche correspondante : PC2	//Sur la Bluepill, cette broche n'est pas câblée !
@@ -87,16 +87,16 @@
 	#define USE_AN14		0	//Broche correspondante : PC4	//Sur la Bluepill, cette broche n'est pas câblée !
 	#define USE_AN15		0	//Broche correspondante : PC5	//Sur la Bluepill, cette broche n'est pas câblée !
 	#define USE_AN16		0	//Capteur de température interne
-	#define USE_AN17		1	//Vref
+	#define USE_AN17		0	//Vref
 
 
-#define USE_SCREEN_TFT_ILI9341		0	//Ecran TFT 2.4
+#define USE_SCREEN_TFT_ILI9341		1	//Ecran TFT 2.4
 	#if USE_SCREEN_TFT_ILI9341
-		#define USE_XPT2046			1	//Tactile
+		#define USE_XPT2046			0	//Tactile
 
-		#define USE_FONT11x18		0
 		#define USE_FONT7x10		1
-		#define USE_FONT16x26		0
+		#define USE_FONT11x18		1
+		#define USE_FONT16x26		1
 	#endif
 
 

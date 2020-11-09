@@ -111,7 +111,7 @@ void ILI9341_INT_Fill(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint16
 void ILI9341_demo(void)
 {
 	ILI9341_Init();
-	ILI9341_Rotate(ILI9341_Orientation_Landscape_2);
+	ILI9341_Rotate(ILI9341_Orientation_Landscape_1);
 //	ILI9341_DisplayOff();
 //	ILI9341_DisplayOn();
 	ILI9341_Fill(ILI9341_COLOR_WHITE);
@@ -164,7 +164,7 @@ void ILI9341_Init(void)
 	
 	/* Set default settings */
 	ILI9341_x = ILI9341_y = 0;
-	ILI9341_Rotate(ILI9341_Orientation_Portrait_1);
+	ILI9341_Rotate(ILI9341_Orientation_Landscape_1);
 	//ILI9341_Rotate(ILI9341_Orientation_Landscape_1);	//Utiliser cette fonction pour modifier l'orientation en paysage
 	
 	/* Fill with white color */
