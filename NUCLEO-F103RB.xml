@@ -8,7 +8,6 @@
 	<!ELEMENT mcuId (#PCDATA)>
 	<!ATTLIST board id CDATA #REQUIRED>
 ]>
-
 <targetDefinitions>
   <board id="nucleo-f103rb">
     <name>NUCLEO-F103RB</name>
