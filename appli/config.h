@@ -94,8 +94,8 @@
 	#if USE_SCREEN_TFT_ILI9341
 		#define USE_XPT2046			0	//Tactile
 
-		#define USE_FONT11x18		1
 		#define USE_FONT7x10		1
+		#define USE_FONT11x18		1
 		#define USE_FONT16x26		1
 	#endif
 

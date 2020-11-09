@@ -14,9 +14,13 @@
 #include "systick.h"
 
 #include "Abstract/Joystick/joystick.h"
-#include "tft_ili9341/stm32f1_ili9341.h"
+#include "Abstract/TFT/TFT_basic.h"
+#include "Abstract/TFT/TFT_advanced.h"
+#include "Abstract/Button/button.h"
+
 #include "Logical/type.h"
-#include "Logical/Logical.h"
+
+static void TEST_triangle();
 
 void writeLED(bool_e b)
 {
