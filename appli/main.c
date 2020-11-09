@@ -20,8 +20,6 @@
 
 #include "Logical/type.h"
 
-static void TEST_triangle();
-
 void writeLED(bool_e b)
 {
 	HAL_GPIO_WritePin(LED_GREEN_GPIO, LED_GREEN_PIN, b);
@@ -77,7 +75,7 @@ int main(void)
 	{
 		if(!t){
 			t=1000;
-			mouvement(JOYSTICK_getDirection(JOYSTICK1));
+			mouvement(JOYSTICK_getDirection(JOYSTICK2));
 			fantome_mvt();
 		}
 
