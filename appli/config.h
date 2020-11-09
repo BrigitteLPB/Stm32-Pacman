@@ -87,7 +87,7 @@
 	#define USE_AN14		0	//Broche correspondante : PC4	//Sur la Bluepill, cette broche n'est pas câblée !
 	#define USE_AN15		0	//Broche correspondante : PC5	//Sur la Bluepill, cette broche n'est pas câblée !
 	#define USE_AN16		0	//Capteur de température interne
-	#define USE_AN17		1	//Vref
+	#define USE_AN17		0	//Vref
 
 
 #define USE_SCREEN_TFT_ILI9341		1	//Ecran TFT 2.4

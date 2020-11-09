@@ -198,19 +198,19 @@ void initWALL(){
 		}
 	}
 	for(int i=0;i<HEIGHT;i++){
-		game.map[1][i].type = WALL;
+		game.map[0][i].type = WALL;
 		ILI9341_DrawFilledRectangle((uint16_t)(310),(uint16_t)(i*10),(uint16_t)(320),(uint16_t)((i+1)*10),ILI9341_COLOR_BLUE);
 	}
 	for(int i=0;i<LENGTH;i++){
-		game.map[i][HEIGHT].type = WALL;
+		game.map[i][HEIGHT-1].type = WALL;
 		ILI9341_DrawFilledRectangle((uint16_t)(i*10),(uint16_t)(0),(uint16_t)((i+1)*10),(uint16_t)(10),ILI9341_COLOR_BLUE);
 	}
 	for(int i=0;i<LENGTH;i++){
-		game.map[i][1].type = WALL;
+		game.map[i][0].type = WALL;
 		ILI9341_DrawFilledRectangle((uint16_t)(i*10),(uint16_t)(230),(uint16_t)((i+1)*10),(uint16_t)(240),ILI9341_COLOR_BLUE);
 	}
 	for(int i=0;i<HEIGHT;i++){
-		game.map[LENGTH][i].type = WALL;
+		game.map[LENGTH-1][i].type = WALL;
 		ILI9341_DrawFilledRectangle((uint16_t)(0),(uint16_t)(i*10),(uint16_t)(10),(uint16_t)((i+1)*10),ILI9341_COLOR_BLUE);
 	}
 
