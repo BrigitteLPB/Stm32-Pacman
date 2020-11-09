@@ -76,9 +76,6 @@ int main(void)
 			mouvement(JOYSTICK_getDirection(JOYSTICK1));
 			fantome_mvt();
 		}
-/*		if(!t){
-			t=1000;
 
-		}*/
 	}
 }
