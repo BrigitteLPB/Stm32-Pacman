@@ -12,12 +12,12 @@
 
 
 // const
-#define CASE_HEIGHT	TFT_HEIGHT/HEIGHT
-#define CASE_WIDTH	TFT_WIDTH/LENGTH
+#define CASE_HEIGHT	TFT_WIDTH/HEIGHT		// swaping height and width due to the landscape orientation
+#define CASE_WIDTH	TFT_HEIGHT/LENGTH
 
 typedef struct{
 	TFT_color_e colors[4];
-
+	TFT_image_s img;
 }PRIVATE_img_ghosts_s;
 
 
@@ -25,7 +25,7 @@ typedef struct{
 	// every images for the game
 static TFT_object_s wall;
 static TFT_object_s ground;
-static TFT_object_s ghosts[4];
+static PRIVATE_img_ghosts_s ghosts;
 static TFT_object_s pacman;
 
 
@@ -72,24 +72,33 @@ void PRIVATE_RENDERER_init_ground(){
 }
 
 void PRIVATE_RENDERER_init_ghosts(){
-	TFT_color_e colors[4] = {COLOR_RED, COLOR_MAGENTA, COLOR_CYAN, COLOR_ORANGE};
+//	TFT_color_e colors[4] = {COLOR_RED, COLOR_MAGENTA, COLOR_CYAN, COLOR_ORANGE};
 
+	ghosts.img.begin = TFT_make_image((pos_s){0,0}, CASE_HEIGHT, CASE_WIDTH);
+	ghosts.colors[0] = COLOR_RED;
+	ghosts.colors[1] = COLOR_MAGENTA;
+	ghosts.colors[2] = COLOR_CYAN;
+	ghosts.colors[3] = COLOR_ORANGE;
 
+	if(ghosts.img.begin != NULL){
+
+	}
+
+//	(TFT_color_e[CASE_HEIGHT][CASE_WIDTH]){
+//		{COLOR_NONE, ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], COLOR_NONE, COLOR_NONE, COLOR_NONE},
+//		{COLOR_NONE, ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], COLOR_NONE, COLOR_NONE, COLOR_NONE},
+//		{COLOR_NONE, ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], COLOR_NONE, COLOR_NONE, COLOR_NONE},
+//		{COLOR_NONE, ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], COLOR_NONE, COLOR_NONE, COLOR_NONE},
+//		{COLOR_NONE, ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], COLOR_NONE, COLOR_NONE, COLOR_NONE},
+//		{COLOR_NONE, ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], COLOR_NONE, COLOR_NONE, COLOR_NONE},
+//		{COLOR_NONE, ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], COLOR_NONE, COLOR_NONE, COLOR_NONE},
+//		{COLOR_NONE, ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], COLOR_NONE, COLOR_NONE, COLOR_NONE},
+//		{COLOR_NONE, ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], COLOR_NONE, COLOR_NONE, COLOR_NONE},
+//		{COLOR_NONE, ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], COLOR_NONE, COLOR_NONE, COLOR_NONE}
+//	};
 
 	for(int i=0; i<4; i++){
-		TFT_init_object(&ghosts[i]);
-		ghosts[i].color = colors[i];
-		ghosts[i].filled= TRUE;
-		ghosts[i].nb_points = 8;
 
-		ghosts[i].points[0] = (pos_s){1,6};
-		ghosts[i].points[1] = (pos_s){2,8};
-		ghosts[i].points[2] = (pos_s){8,8};
-		ghosts[i].points[3] = (pos_s){7,5};
-		ghosts[i].points[4] = (pos_s){7,4};
-		ghosts[i].points[5] = (pos_s){8,1};
-		ghosts[i].points[6] = (pos_s){2,1};
-		ghosts[i].points[7] = (pos_s){1,3};
 	}
 }
 
@@ -98,9 +107,9 @@ void PRIVATE_RENDERER_init_pacman(){
 
 	pacman.color = COLOR_YELLOW;
 	pacman.filled = TRUE;
-	pacman.
+//	pacman.
 }
 
 void RENDERER_test(){
-	TFT_draw_object(&ghosts[0]);
+	TFT_put_image_swap_color(&ghosts.img, ghosts.colors[0], ghosts.colors[0]);
 }
