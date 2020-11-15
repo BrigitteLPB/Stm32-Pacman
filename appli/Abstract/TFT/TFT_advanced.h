@@ -38,7 +38,20 @@
 		pos_s			top_left;
 	}TFT_text_s;
 
+	typedef struct {
+		uint16_t	width;
+		uint16_t	height;
+		pos_s		position;
+		TFT_color_e *begin;		// start of the data
+	}TFT_image_s;
+
+
 	// function
+	/**
+	 * @breif	initialise basic and image
+	 */
+	void TFT_avanced_init(TFT_orientation_e orientation);
+
 	/**
 	 * @return	return a object with a triangle
 	 */
@@ -55,6 +68,11 @@
 	TFT_text_s TFT_make_text(char* text, pos_s top_left, TFT_text_size_e font, TFT_color_e foreground, TFT_color_e background);
 
 	/**
+	 * @brief	return a struct initialse for an image. begin is NULL if alloc failed
+	 */
+	TFT_image_s TFT_make_image(pos_s top_left, uint16_t height, uint16_t width);
+
+	/**
 	 * @brief	put text
 	 */
 	void TFT_put_text(TFT_text_s* text);
@@ -63,6 +81,17 @@
 	 * @brief	clear the text by adding background colored rect on the text
 	 */
 	void TFT_clean_text(TFT_text_s* text, TFT_color_e background);
+
+	/**
+	 * @brief	put an image on the screen
+	 */
+	void TFT_put_image(TFT_image_s* image);
+
+	/**
+	 * @brief	put an image and change the swapped color by the new
+	 */
+	void TFT_put_image_swap_color(TFT_image_s* image, TFT_color_e swapped, TFT_color_e new);
+
 
 	void TFT_test_avanced(void);
 

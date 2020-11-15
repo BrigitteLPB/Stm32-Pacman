@@ -6,7 +6,7 @@
  */
 #include "TFT_advanced.h"
 // include
-
+#include "TFT_image_alloc.h"
 
 
 // const
@@ -18,6 +18,11 @@
 
 
 // function
+void TFT_avanced_init(TFT_orientation_e orientation){
+	TFT_init(orientation);
+	IMG_ALLOC_init();
+}
+
 TFT_object_s TFT_make_triangle(pos_s xy1, pos_s xy2, pos_s xy3, TFT_color_e color, bool_e filled){
 	// init
 	TFT_object_s return_value;
@@ -63,6 +68,17 @@ TFT_text_s TFT_make_text(char* text, pos_s top_left, TFT_text_size_e font, TFT_c
 	return text_construct;
 }
 
+TFT_image_s TFT_make_image(pos_s top_left, uint16_t height, uint16_t width){
+	TFT_image_s image;
+
+	image.height = height;
+	image.width = width;
+	image.position = top_left;
+	image.begin = IMG_ALLOC_new(width, height);
+
+	return image;
+}
+
 void TFT_put_text(TFT_text_s* text){
 	FontDef_t *font = NULL;
 	switch(text->font){
@@ -97,6 +113,33 @@ void TFT_clean_text(TFT_text_s* text, TFT_color_e background){
 	TFT_put_text(&copy);
 }
 
+void TFT_put_image(TFT_image_s* image){
+	TFT_put_image_swap_color(image, COLOR_BLACK, COLOR_BLACK);
+}
+
+void TFT_put_image_swap_color(TFT_image_s* image, TFT_color_e swapped, TFT_color_e new){
+	if(image->begin != NULL){
+		bool_e do_swap = FALSE;
+		if(swapped != new){
+			do_swap = TRUE;
+		}
+
+		for(uint32_t i=0; i<(uint32_t) (image->height*image->width); i++){
+			TFT_color_e pixel = image->begin[i];
+
+			if(pixel != COLOR_NONE){
+				uint16_t x = (uint16_t)((uint16_t)(image->position.x) + i%image->width);
+				uint16_t y = (uint16_t)((uint16_t)(image->position.y) + i/image->height);
+
+				if(pixel == swapped && do_swap){
+					pixel = new;
+				}
+
+				ILI9341_DrawPixel(x, y, (uint16_t) pixel);
+			}
+		}
+	}
+}
 
 void TFT_test_avanced(void){
 	TFT_object_s rect = TFT_make_rect((pos_s){100,150}, (pos_s){200, 250}, COLOR_BLUE, TRUE);
@@ -118,5 +161,17 @@ void TFT_test_avanced(void){
 	TFT_text_s text3 = TFT_make_text("FONT_16x26", (pos_s){60, 10}, FONT_16x26, COLOR_WHITE, COLOR_BLACK);
 	TFT_put_text(&text3);
 #endif
+
+	TFT_image_s image = TFT_make_image((pos_s){100, 100}, 20, 20);
+
+	if(image.begin != NULL){
+		TFT_color_e colors[5] = {COLOR_NONE, COLOR_BLUE, COLOR_GREEN, COLOR_RED, COLOR_BLACK};
+
+		for(uint16_t i=0; i<image.height*image.width; i++){
+			image.begin[i] = colors[i%5];
+		}
+
+		TFT_put_image(&image);
+	}
 }
 
