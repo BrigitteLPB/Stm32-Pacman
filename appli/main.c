@@ -67,7 +67,8 @@ int main(void)
 	Systick_add_callback_function(&process_ms);
 
 	JOYSTICK_init();
-	TFT_init(TFT_LANDSCAPE_RIGTH);
+//	TFT_init(TFT_LANDSCAPE_RIGTH);
+	TFT_avanced_init(TFT_LANDSCAPE_RIGTH);
 	BUTTON_init();
 	RENDERER_init();
 
