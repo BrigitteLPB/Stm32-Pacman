@@ -75,9 +75,9 @@ int main(void)
 	/*--- TESTS ---*/
 //	JOYSTICK_test();
 //	TFT_test_basic();
-	TFT_test_avanced();
+//	TFT_test_avanced();
 //	TEST_triangle();
-//	RENDERER_test();
+	RENDERER_test();
 
 
 	while(1)	//boucle de t�che de fond
