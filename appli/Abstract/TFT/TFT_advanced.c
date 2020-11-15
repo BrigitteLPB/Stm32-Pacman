@@ -139,13 +139,13 @@ void TFT_test_avanced(void){
 	TFT_put_text(&text3);
 #endif
 
-	TFT_image_s image = TFT_make_image((pos_s){100, 100}, 40, 40);
+	TFT_image_s image = TFT_make_image((pos_s){100, 100}, 64, 64);
 
 	if(image.begin != NULL){
 		TFT_color_e colors[5] = {COLOR_NONE, COLOR_BLUE, COLOR_GREEN, COLOR_RED, COLOR_BLACK};
 
 		for(uint16_t i=0; i<image.height*image.width; i++){
-			*(image.begin + sizeof(TFT_color_e) * i) = colors[i%5];
+			image.begin[i] = colors[i%5];
 		}
 
 		TFT_put_image(&image);

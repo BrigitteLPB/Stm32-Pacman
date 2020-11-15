@@ -25,7 +25,7 @@ typedef struct {
 static PRIVATE_gallery_s gallery;
 static PRIVATE_indexs_s paint_position;
 
-static data_t* last_indicator;
+static volatile data_t* last_indicator;
 
 
 // private prototype
@@ -51,7 +51,7 @@ data_t* IMG_ALLOC_new(uint16_t x_size, uint16_t y_size){
 			gallery.free_space -= size;
 			paint_position.nb++;
 			paint_position.index[paint_position.nb] = paint_position.index[paint_position.nb-1] + size;
-			assert(paint_position.index[paint_position.nb-1] == last_indicator && "Renvoie de la derniere adresse");
+//			assert(last_indicator == NULL);
 			return paint_position.index[paint_position.nb-1];
 		}else{
 			return NULL;
