@@ -20,7 +20,7 @@
 
 	// énumération publique
 	typedef enum {
-		COLOR_NONE		= ILI9341_TRANSPARENT,
+		COLOR_NONE		= 0x0001,				// a color unused by the followed by the enums
 		COLOR_WHITE 	= ILI9341_COLOR_WHITE,
 		COLOR_BLACK 	= ILI9341_COLOR_BLACK,
 		COLOR_RED 		= ILI9341_COLOR_RED,

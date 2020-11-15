@@ -114,9 +114,32 @@ void TFT_clean_text(TFT_text_s* text, TFT_color_e background){
 }
 
 void TFT_put_image(TFT_image_s* image){
-	ILI9341_putImage(image->position.x,image->position.y, image->width, image->height, image->begin, image->height*image->width);
+	TFT_put_image_swap_color(image, COLOR_BLACK, COLOR_BLACK);
 }
 
+void TFT_put_image_swap_color(TFT_image_s* image, TFT_color_e swapped, TFT_color_e new){
+	if(image->begin != NULL){
+		bool_e do_swap = FALSE;
+		if(swapped != new){
+			do_swap = TRUE;
+		}
+
+		for(uint32_t i=0; i<(uint32_t) (image->height*image->width); i++){
+			TFT_color_e pixel = image->begin[i];
+
+			if(pixel != COLOR_NONE){
+				uint16_t x = (uint16_t)((uint16_t)(image->position.x) + i%image->width);
+				uint16_t y = (uint16_t)((uint16_t)(image->position.y) + i/image->height);
+
+				if(pixel == swapped && do_swap){
+					pixel = new;
+				}
+
+				ILI9341_DrawPixel(x, y, (uint16_t) pixel);
+			}
+		}
+	}
+}
 
 void TFT_test_avanced(void){
 	TFT_object_s rect = TFT_make_rect((pos_s){100,150}, (pos_s){200, 250}, COLOR_BLUE, TRUE);
@@ -139,7 +162,7 @@ void TFT_test_avanced(void){
 	TFT_put_text(&text3);
 #endif
 
-	TFT_image_s image = TFT_make_image((pos_s){100, 100}, 64, 64);
+	TFT_image_s image = TFT_make_image((pos_s){100, 100}, 20, 20);
 
 	if(image.begin != NULL){
 		TFT_color_e colors[5] = {COLOR_NONE, COLOR_BLUE, COLOR_GREEN, COLOR_RED, COLOR_BLACK};
