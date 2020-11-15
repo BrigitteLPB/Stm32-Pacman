@@ -1,3 +1,4 @@
+
 /**
  * @file	game_renderer.c
  * @brief	all definition to render the game
