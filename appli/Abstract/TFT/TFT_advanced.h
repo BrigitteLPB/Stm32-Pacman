@@ -92,6 +92,8 @@
 	 */
 	void TFT_put_image_swap_color(TFT_image_s* image, TFT_color_e swapped, TFT_color_e new);
 
+	void TFT_fill_image(TFT_image_s* image, TFT_color_e data[]);
+
 	void TFT_test_avanced(void);
 
 #endif /* ABSTRACT_TFT_TFT_ADVANCED_H_ */
