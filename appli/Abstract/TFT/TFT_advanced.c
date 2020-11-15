@@ -141,6 +141,14 @@ void TFT_put_image_swap_color(TFT_image_s* image, TFT_color_e swapped, TFT_color
 	}
 }
 
+void TFT_fill_image(TFT_image_s* image, TFT_color_e data[]){
+	if(image->begin != NULL){
+		for(uint32_t i=0; i<image->height*image->height; i++){
+			image->begin[i] = data[i];
+		}
+	}
+}
+
 void TFT_test_avanced(void){
 	TFT_object_s rect = TFT_make_rect((pos_s){100,150}, (pos_s){200, 250}, COLOR_BLUE, TRUE);
 
@@ -164,14 +172,15 @@ void TFT_test_avanced(void){
 
 	TFT_image_s image = TFT_make_image((pos_s){100, 100}, 20, 20);
 
-	if(image.begin != NULL){
-		TFT_color_e colors[5] = {COLOR_NONE, COLOR_BLUE, COLOR_GREEN, COLOR_RED, COLOR_BLACK};
+	TFT_color_e colors[5] = {COLOR_NONE, COLOR_BLUE, COLOR_GREEN, COLOR_RED, COLOR_BLACK};
+	TFT_color_e datas[image.height*image.height];
 
-		for(uint16_t i=0; i<image.height*image.width; i++){
-			image.begin[i] = colors[i%5];
-		}
-
-		TFT_put_image(&image);
+	for(uint16_t i=0; i<image.height*image.width; i++){
+		datas[i] = colors[i%5];
 	}
+
+	TFT_fill_image(&image, datas);
+
+	TFT_put_image(&image);
 }
 
