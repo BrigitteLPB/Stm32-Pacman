@@ -15,6 +15,11 @@
 #define CASE_HEIGHT	TFT_HEIGHT/HEIGHT
 #define CASE_WIDTH	TFT_WIDTH/LENGTH
 
+typedef struct{
+	TFT_color_e colors[4];
+
+}PRIVATE_img_ghosts_s;
+
 
 // global
 	// every images for the game
@@ -68,6 +73,8 @@ void PRIVATE_RENDERER_init_ground(){
 
 void PRIVATE_RENDERER_init_ghosts(){
 	TFT_color_e colors[4] = {COLOR_RED, COLOR_MAGENTA, COLOR_CYAN, COLOR_ORANGE};
+
+
 
 	for(int i=0; i<4; i++){
 		TFT_init_object(&ghosts[i]);
