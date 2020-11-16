@@ -9,7 +9,7 @@
 	#define DISPLAY_RENDERER_RENDERER_H_
 
 	// include
-
+	#include "../../Logical/type.h"
 
 	// const
 	typedef enum {
@@ -35,6 +35,11 @@
 	 * @brief	kill and init
 	 */
 	void RENDERER_reset(void);
+
+	/**
+	 * @brief	show the game in the map
+	 */
+	void RENDERER_show(game_s *game);
 
 	/**
 	 * @brief	test l'affichage
