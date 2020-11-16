@@ -19,6 +19,8 @@
 void mouvement(JOYSTICK_direction direction);
 void initWALL();
 void fantome_mvt();
+void initMAP();
+void refreshMAP();
 
 
 #endif /* LOGICAL_LOGICAL_H_ */

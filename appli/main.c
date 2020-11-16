@@ -67,7 +67,8 @@ int main(void)
 	JOYSTICK_init();
 
 	ILI9341_Init();
-	initWALL();
+	initMAP();
+	refreshMAP();
 	/*--- TESTS ---*/
 	//JOYSTICK_test();
 
