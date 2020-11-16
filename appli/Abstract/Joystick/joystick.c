@@ -13,7 +13,7 @@ static volatile bool FLAG_1S = false;
 
 // const
 	typedef adc_id_e ADC_CHANNEL;
-	#define MILIEU (uint16_t) 2048
+	#define MILIEU (uint16_t) 1850
 	#define TOLERANCE_MAX 500
 	#define TOLERANCE_MIN -500
 	#define abs(x) ((x<0)?-x:x)
@@ -21,31 +21,27 @@ static volatile bool FLAG_1S = false;
 //prototype
 	static JOYSTICK_direction PRIVATE_JOYSTICK_getDirection(ADC_CHANNEL X, ADC_CHANNEL Y);
 
-	static void process_ms();
-
-
-
 // private function
 	JOYSTICK_direction PRIVATE_JOYSTICK_getDirection(ADC_CHANNEL X, ADC_CHANNEL Y){
 		int16_t X_value = ADC_getValue(X)-MILIEU;
 		//printf("X value : %d\n",MILIEU);
 		int16_t Y_value = ADC_getValue(Y)-MILIEU;
-		//printf("X value : %d\n",X_value);
-		//printf("Y value : %d\n",Y_value);
-		if (X_value>TOLERANCE_MIN && X_value<TOLERANCE_MAX && Y_value>TOLERANCE_MIN && Y_value<TOLERANCE_MAX){
-			return NEUTRE;
-		}
-		else if (X_value>TOLERANCE_MAX && abs(Y_value)<(X_value)){
-			return DROITE;
-		}
-		else if(Y_value>TOLERANCE_MAX && abs(X_value)<=(Y_value)){
+		printf("X value : %d\n",X_value);
+		printf("Y value : %d\n",Y_value);
+		if (Y_value<TOLERANCE_MIN && abs(Y_value)>abs(X_value)){
 			return BAS;
 		}
-		else if(X_value<TOLERANCE_MIN && abs(Y_value)<abs(X_value)){
+		else if (X_value>TOLERANCE_MAX && abs(Y_value)<abs(X_value)){
 			return GAUCHE;
 		}
-		else{
+		else if(Y_value>TOLERANCE_MAX && abs(X_value)<=abs(Y_value)){
 			return HAUT;
+		}
+		else if(X_value<TOLERANCE_MIN && abs(Y_value)<abs(X_value)){
+			return DROITE;
+		}
+		else{
+			return NEUTRE;
 		}
 	 }
 
