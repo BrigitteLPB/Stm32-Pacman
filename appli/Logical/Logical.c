@@ -188,7 +188,7 @@ void sens_fantome(uint16_t* x,uint16_t* y){
 	}
 }
 
-
+/*
 void initWALL(){
 	for(int i=0;i<LENGTH;i++){
 		for(int j=0;j<HEIGHT;j++){
@@ -213,20 +213,31 @@ void initWALL(){
 		game.map[LENGTH-1][i].type = WALL;
 		ILI9341_DrawFilledRectangle((uint16_t)(0),(uint16_t)(i*10),(uint16_t)(10),(uint16_t)((i+1)*10),ILI9341_COLOR_BLUE);
 	}
-}
+}*/
 
 void initMAP(){
-	game.map[1][5].type = WALL;
-	game.map[1][18].type = WALL;
-	game.map[30][5].type = WALL;
-	game.map[30][18].type = WALL;
-	for(int i=2;i<4;i++){					//carré
-		game.map[i][i].type = WALL;
-		game.map[i+26][i].type = WALL;
-		game.map[i][i+19].type = WALL;
-		game.map[i+26][i+19].type = WALL;
-		game.map[i+13][i+6].type = WALL;
-		game.map[i+13][i+12].type = WALL;
+	for(int i=0;i<LENGTH;i++){				//point + contours
+		for(int j=0;j<HEIGHT;j++){
+			game.map[i][j].type = OBJECT;
+			game.map[0][j].type = WALL;
+			game.map[i][HEIGHT-1].type = WALL;
+			game.map[i][0].type = WALL;
+			game.map[LENGTH-1][j].type = WALL;
+		}
+	}
+
+											//les murs
+	for(int x=0;x<2;x++){					//carré
+		for(int y=0;y<2;y++){
+			game.map[15+x][11+y].type = WALL_WITH_PHANTOM;
+
+			game.map[2+x][2+x].type = WALL;
+			game.map[28+x][2+y].type = WALL;
+			game.map[2+x][21+y].type = WALL;
+			game.map[28+x][21+y].type = WALL;
+			game.map[15+x][8+y].type = WALL;
+			game.map[15+x][14+y].type = WALL;
+		}
 	}
 	for(int y=7;y<17;y++){					//colonne de 10
 		game.map[2][y].type = WALL;
@@ -309,6 +320,43 @@ void initMAP(){
 		game.map[i+10][6].type = WALL;
 		game.map[i+20][17].type = WALL;
 		game.map[i+21][16].type = WALL;
+		game.map[i+20][6].type = WALL;
+		game.map[i+27][7].type = WALL;
+		game.map[i+9][16].type = WALL;
+		game.map[i+10][17].type = WALL;
+
+		game.map[10][i+11].type = WALL;
+		game.map[21][i+11].type = WALL;
+
+		game.map[14][i+11].type = WALL;
+		game.map[17][i+11].type = WALL;
+	}
+											//longueur de 1
+	game.map[1][5].type = WALL;
+	game.map[1][18].type = WALL;
+	game.map[30][5].type = WALL;
+	game.map[30][18].type = WALL;
+	game.map[7][7].type = WALL;
+	game.map[7][16].type = WALL;
+	game.map[24][7].type = WALL;
+	game.map[24][16].type = WALL;
+
+	refreshMAP();
+}
+
+void refreshMAP(){
+	for(int i=0;i<LENGTH;i++){
+		for(int j=0;j<HEIGHT;j++){
+			if(game.map[i][j].type == WALL || game.map[i][j].type == WALL_WITH_PHANTOM){
+				ILI9341_DrawFilledRectangle((uint16_t)(i*10),(uint16_t)(j*10),(uint16_t)((i+1)*10),(uint16_t)((j+1)*10),ILI9341_COLOR_BLUE);
+			}
+			if(game.map[i][j].type == FREE){
+				ILI9341_DrawFilledRectangle((uint16_t)(i*10),(uint16_t)(j*10),(uint16_t)((i+1)*10),(uint16_t)((j+1)*10),ILI9341_COLOR_BLACK);
+			}
+			if(game.map[i][j].type == OBJECT){
+				ILI9341_DrawPixel((uint16_t)((i*10)+5),(uint16_t)((j*10)+5),ILI9341_COLOR_WHITE);
+			}
+		}
 	}
 }
 
