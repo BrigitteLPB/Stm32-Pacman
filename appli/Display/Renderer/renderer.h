@@ -12,12 +12,7 @@
 	#include "../../Logical/type.h"
 
 	// const
-	typedef enum {
-		GHOST_1,
-		GHOST_2,
-		GHOST_3,
-		GHOST_4
-	}RENDERER_ghost_e;
+
 
 
 	// function
