@@ -22,6 +22,13 @@ typedef struct{
 	TFT_image_s img;
 }PRIVATE_img_ghosts_s;
 
+typedef enum {
+	GHOST_1 = 0,
+	GHOST_2 = 1,
+	GHOST_3 = 2,
+	GHOST_4 = 3
+}RENDERER_ghost_e;
+
 
 // global
 	// every images for the game
@@ -31,6 +38,7 @@ static PRIVATE_img_ghosts_s ghosts;
 static TFT_image_s pacman;
 
 
+static game_s game_copy;
 
 
 // private prototype
@@ -78,6 +86,39 @@ void RENDERER_kill(void){
 void RENDERER_reset(void){
 	RENDERER_kill();
 	RENDERER_init();
+}
+
+void RENDERER_show(game_s *game){
+	for(int y=0; y<LENGTH;y++){
+		for(int x=0; x<HEIGHT; x++){
+			if(game->map[y][x] != game_copy.map[y][x]){
+				pos_s pos;
+				pos.y = y;
+				pos.x = x;
+
+				switch(game->map[y][x]){
+					case WALL:
+					case WALL_WITH_PHANTOM:
+						PRIVATE_RENDERER_put_wall(pos);
+						break;
+					case FREE:
+						PRIVATE_RENDERER_put_ground(pos);
+						break;
+					case OBJECT:
+						break;
+				}
+			}
+		}
+	}
+
+	// show fantome and pacman
+	for(int i=0; i<game->phantom_count; i++){
+		PRIVATE_RENDERER_put_ghost(game->phantoms[i].pos, (RENDERER_ghost_e)i);
+	}
+
+	PRIVATE_RENDERER_put_pacman(game->pacman.pos);
+
+	game_copy = game;
 }
 
 void PRIVATE_RENDERER_init_wall(){
@@ -175,14 +216,34 @@ void PRIVATE_RENDERER_put_pacman(pos_s pos){
 }
 
 void RENDERER_test(){
-	for(int i=0; i<6; i++){
-		PRIVATE_RENDERER_put_ground((pos_s){0,i});
+//	for(int i=0; i<6; i++){
+//		PRIVATE_RENDERER_put_ground((pos_s){0,i});
+//	}
+//
+//	PRIVATE_RENDERER_put_ghost((pos_s){0,0}, GHOST_1);
+//	PRIVATE_RENDERER_put_ghost((pos_s){0,1}, GHOST_2);
+//	PRIVATE_RENDERER_put_ghost((pos_s){0,2}, GHOST_3);
+//	PRIVATE_RENDERER_put_ghost((pos_s){0,3}, GHOST_4);
+//	PRIVATE_RENDERER_put_pacman((pos_s){0,4});
+//	PRIVATE_RENDERER_put_wall((pos_s){0,5});
+
+	game_s game;
+	game.phantom_count = 4;
+	game.phantoms[0].pos = (pos_s){1,0};
+	game.phantoms[1].pos = (pos_s){3,3};
+	game.phantoms[2].pos = (pos_s){3,6};
+	game.phantoms[3].pos = (pos_s){3,9};
+	game.pacman.pos = (pos_s){3,12};
+
+	for(int y=0; y<LENGTH; y++){
+		for(int x=0; x<HEIGHT; x++){
+			if(y==0 || y<LENGTH-1 || x==0 || x==HEIGHT-1){
+				game.map[y][x] = WALL;
+			}else{
+				game.map[y][x] = FREE;
+			}
+		}
 	}
 
-	PRIVATE_RENDERER_put_ghost((pos_s){0,0}, GHOST_1);
-	PRIVATE_RENDERER_put_ghost((pos_s){0,1}, GHOST_2);
-	PRIVATE_RENDERER_put_ghost((pos_s){0,2}, GHOST_3);
-	PRIVATE_RENDERER_put_ghost((pos_s){0,3}, GHOST_4);
-	PRIVATE_RENDERER_put_pacman((pos_s){0,4});
-	PRIVATE_RENDERER_put_wall((pos_s){0,5});
+	RENDERER_show(&game);
 }
