@@ -8,6 +8,8 @@
 
 	// include
 	#include "stm32f1_adc.h"
+	#include "systick.h"
+	#include "stdbool.h"
 
 	// const
 	#define X1 ADC_0	//joystick n1

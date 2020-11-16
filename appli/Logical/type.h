@@ -34,11 +34,6 @@
 		OBJECT,	//cell with a point on it
 		PACMAN,
 		FANTOME
-	}type_cell;
-
-	typedef struct {
-		void *data;
-		type_cell type;
 	}cell_s;
 
 	// object / caracter
@@ -83,6 +78,13 @@
 		phantom_s *phantoms[MAX_PHANTOM];
 		pacman_s *pacman;
 	}game_s;
+
+	typedef enum{
+		JEU,
+		//GAME_OVER,
+		//WIN,
+		MENU
+	}state_game;
 
 
 
