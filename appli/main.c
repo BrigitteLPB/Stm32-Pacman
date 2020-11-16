@@ -64,11 +64,9 @@ int main(void)
 	//On ajoute la fonction process_ms � la liste des fonctions appel�es automatiquement chaque ms par la routine d'interruption du p�riph�rique SYSTICK
 	Systick_add_callback_function(&process_ms);
 
-	JOYSTICK_init();
-//	TFT_init(TFT_LANDSCAPE_RIGTH);
 	TFT_avanced_init(TFT_LANDSCAPE_RIGTH);
+	JOYSTICK_init();
 	BUTTON_init();
-	RENDERER_init();
 
 
 	/*--- TESTS ---*/
@@ -78,8 +76,7 @@ int main(void)
 //	TEST_triangle();
 	RENDERER_test();
 
-
-	while(1)	//boucle de t�che de fond
+	while(1)	//boucle de tache de fond
 	{
 		if(!t){
 			t=1000;

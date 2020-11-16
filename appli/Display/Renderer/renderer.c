@@ -11,8 +11,8 @@
 #include "../../Abstract/TFT/TFT_advanced.h"
 #include "../../Abstract/TFT/TFT_image_alloc.h"
 
-#include "../../Logical/type.h"
-
+#include "../../Abstract/Button/button.h"
+#include "../../Abstract/Rand/rand.h"
 
 // const
 #define CASE_HEIGHT	TFT_WIDTH/HEIGHT		// swaping height and width due to the landscape orientation
@@ -48,7 +48,9 @@ static void PRIVATE_RENDERER_init_ground();
 
 static void PRIVATE_RENDERER_init_ghosts();
 
-void PRIVATE_RENDERER_init_pacman();
+static void PRIVATE_RENDERER_init_pacman();
+
+static void PRIVATE_RENDERER_show(game_s* game, bool_e fullPrint);
 
 /**
  * @param	pos	game position
@@ -70,12 +72,16 @@ static void PRIVATE_RENDERER_put_ghost(PACMAN_position pos, RENDERER_ghost_e gho
  */
 static void PRIVATE_RENDERER_put_pacman(PACMAN_position pos, bool_e predator);
 
+
 // function
-void RENDERER_init(void){
+void RENDERER_init(game_s *game){
 	PRIVATE_RENDERER_init_wall();
 	PRIVATE_RENDERER_init_ground();
 	PRIVATE_RENDERER_init_ghosts();
 	PRIVATE_RENDERER_init_pacman();
+
+	game_copy = *game;
+	PRIVATE_RENDERER_show(game, TRUE);
 }
 
 void RENDERER_kill(void){
@@ -83,28 +89,37 @@ void RENDERER_kill(void){
 	IMG_ALLOC_delete(pacman.begin);
 }
 
-void RENDERER_reset(void){
+void RENDERER_reset(game_s *game){
 	RENDERER_kill();
-	RENDERER_init();
+	RENDERER_init(game);
 }
 
 void RENDERER_show(game_s *game){
-	for(uint16_t y=0; y<LENGTH; y++){
-		for(uint16_t x=0; x<HEIGHT; x++){
-			if(game->map[y][x] != game_copy.map[y][x]){
-				switch (game->map[y][x]) {
+	PRIVATE_RENDERER_show(game, FALSE);
+}
+
+void PRIVATE_RENDERER_show(game_s* game, bool_e fullPrint){
+	for(uint16_t x=0; x<LENGTH; x++){
+		for(uint16_t y=0; y<HEIGHT; y++){
+			if(game->map[x][y] != game_copy.map[x][y] || fullPrint){
+				PACMAN_position pos;
+				pos.y = (PACMAN_unit) y;
+				pos.x = (PACMAN_unit) x;
+
+				switch (game->map[x][y]) {
 					case WALL:
 					case WALL_WITH_PHANTOM:
-
+						PRIVATE_RENDERER_put_wall(pos);
 						break;
 					case FREE:
 					case PACMAN:
 					case FANTOME:
-
+						PRIVATE_RENDERER_put_ground(pos);
 						break;
 					case OBJECT:
 
 						break;
+				}
 			}
 		}
 	}
@@ -181,8 +196,8 @@ void PRIVATE_RENDERER_init_pacman(){
 }
 
 void PRIVATE_RENDERER_put_wall(PACMAN_position pos){
-	uint16_t x = pos.x*CASE_WIDTH;
-	uint16_t y = pos.y*CASE_HEIGHT;
+	uint16_t x = (uint16_t) (pos.x*CASE_WIDTH);
+	uint16_t y = (uint16_t) (pos.y*CASE_HEIGHT);
 
 	TFT_move_object(&wall, (position)x, (position)y);
 	TFT_draw_object(&wall);
@@ -191,8 +206,8 @@ void PRIVATE_RENDERER_put_wall(PACMAN_position pos){
 }
 
 void PRIVATE_RENDERER_put_ground(PACMAN_position pos){
-	uint16_t x = pos.x*CASE_WIDTH;
-	uint16_t y = pos.y*CASE_HEIGHT;
+	uint16_t x = (uint16_t)(pos.x*CASE_WIDTH);
+	uint16_t y = (uint16_t)(pos.y*CASE_HEIGHT);
 
 	TFT_move_object(&ground, (position)x, (position)y);
 	TFT_draw_object(&ground);
@@ -221,34 +236,76 @@ void PRIVATE_RENDERER_put_pacman(PACMAN_position pos, bool_e predator){
 }
 
 void RENDERER_test(){
-//	for(int i=0; i<6; i++){
-//		PRIVATE_RENDERER_put_ground((pos_s){0,(position)i});
-//	}
-//
-//	PRIVATE_RENDERER_put_ghost((pos_s){0,0}, GHOST_1);
-//	PRIVATE_RENDERER_put_ghost((pos_s){0,1}, GHOST_2);
-//	PRIVATE_RENDERER_put_ghost((pos_s){0,2}, GHOST_3);
-//	PRIVATE_RENDERER_put_ghost((pos_s){0,3}, GHOST_4);
-//	PRIVATE_RENDERER_put_pacman((pos_s){0,4}, FALSE);
-//	PRIVATE_RENDERER_put_wall((pos_s){0,5});
-
 	game_s game;
-	game.pacman.pos = (PACMAN_position){3,1};
 	game.phantom_count = 4;
-	game.phantoms[0].pos = (PACMAN_position){6,1};
-	game.phantoms[1].pos = (PACMAN_position){9,1};
-	game.phantoms[2].pos = (PACMAN_position){12,1};
-	game.phantoms[3].pos = (PACMAN_position){15,1};
-
-	for(int y=0; y<LENGTH; y++){
-		for(int x=0; x<HEIGHT; x++){
-			if(y==0 || y==LENGTH-1 || x==0 || x==HEIGHT-1){
-				game.map[y][x] = WALL;
+	for(int x=0; x<LENGTH; x++){
+		for(int y=0; y<HEIGHT; y++){
+			if(y==0 || y==HEIGHT-1 || x==0 || x==LENGTH-1){
+				game.map[x][y] = WALL;
 			}else{
-				game.map[y][x] = FREE;
+				game.map[x][y] = FREE;
 			}
 		}
 	}
 
-	RENDERER_show(&game);
+	game.pacman.pos = (PACMAN_position){1,1};
+	game.map[game.pacman.pos.x][game.pacman.pos.y] = PACMAN;
+
+	for(int i=0; i<game.phantom_count; i++){
+		game.phantoms[i].pos = (PACMAN_position){(PACMAN_unit)(i+1),2};
+		game.map[game.phantoms[i].pos.x][game.phantoms[i].pos.y] = FANTOME;
+	}
+
+	RENDERER_init(&game);
+	BUTTON_init();
+	RAND_init();
+
+	// change the game
+	while(TRUE){
+		// pacman
+		game.map[game.pacman.pos.x][game.pacman.pos.y] = FREE;
+		game.pacman.pos = (PACMAN_position){(PACMAN_unit)((RAND_get()%(LENGTH-2)+1)),(PACMAN_unit)((RAND_get()%(HEIGHT-2))+1)};
+		game.map[game.pacman.pos.x][game.pacman.pos.y] = PACMAN;
+
+		// phantom
+		for(int i=0; i<game.phantom_count; i++){
+			game.map[game.phantoms[i].pos.x][game.phantoms[i].pos.y] = FREE;
+			game.phantoms[i].pos = (PACMAN_position){(PACMAN_unit)((RAND_get()%(LENGTH-2)+1)),(PACMAN_unit)((RAND_get()%(HEIGHT-2))+1)};
+			game.map[game.phantoms[i].pos.x][game.phantoms[i].pos.y] = FANTOME;
+		}
+
+		// a wall
+		game.map[(RAND_get()%(LENGTH-2))+1][(RAND_get()%(HEIGHT-2))+1] = WALL;
+
+		// a ground
+		game.map[(RAND_get()%(LENGTH-2))+1][(RAND_get()%(HEIGHT-2))+1] = FREE;
+
+		// show
+		RENDERER_show(&game);
+
+		// block input
+		while(BUTTON_state_machine() == BUTTON_EVENT_NONE){
+			RAND_catch_event();
+		}
+	}
+//
+//	game.map[game.pacman.pos.x][game.pacman.pos.y] = FREE;
+//	game.map[game.phantoms[0].pos.x][game.phantoms[0].pos.y] = FREE;
+//	game.map[game.phantoms[1].pos.x][game.phantoms[1].pos.y] = FREE;
+//	game.map[game.phantoms[2].pos.x][game.phantoms[2].pos.y] = FREE;
+//	game.map[game.phantoms[3].pos.x][game.phantoms[3].pos.y] = WALL;
+//
+//
+//	game.pacman.pos.y = 3;			game.map[game.pacman.pos.x][game.pacman.pos.y] = PACMAN;
+//	game.phantoms[0].pos.y = 4;		game.map[game.phantoms[0].pos.x][game.phantoms[0].pos.y] = FANTOME;
+//	game.phantoms[1].pos.y = 5;		game.map[game.phantoms[1].pos.x][game.phantoms[1].pos.y] = FANTOME;
+//	game.phantoms[2].pos.y = 6;		game.map[game.phantoms[2].pos.x][game.phantoms[2].pos.y] = FANTOME;
+//	game.phantoms[3].pos.y = 7;		game.map[game.phantoms[3].pos.x][game.phantoms[3].pos.x] = FANTOME;
+//
+//	game.map[game.phantoms[3].pos.x][game.phantoms[3].pos.y] = WALL_WITH_PHANTOM;
+//
+//	while(BUTTON_state_machine() == BUTTON_EVENT_NONE);
+//
+//	RENDERER_show(&game);
 }
+

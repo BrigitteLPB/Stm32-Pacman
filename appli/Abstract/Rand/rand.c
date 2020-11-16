@@ -46,6 +46,11 @@ void RAND_init(){
 		index=0;
 
 		init = TRUE;
+
+		// filled up the values
+		while(index < MAX_VALUES_COUNT){
+			RAND_catch_event();
+		}
 	}
 }
 

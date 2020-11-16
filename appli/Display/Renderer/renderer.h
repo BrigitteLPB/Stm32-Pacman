@@ -19,7 +19,7 @@
 	/**
 	 * @brief	initialise l'affichage
 	 */
-	void RENDERER_init(void);
+	void RENDERER_init(game_s *game);
 
 	/**
 	 * @brief	de-initialise l'affichage
@@ -29,7 +29,7 @@
 	/**
 	 * @brief	kill and init
 	 */
-	void RENDERER_reset(void);
+	void RENDERER_reset(game_s *game);
 
 	/**
 	 * @brief	show the game in the map
@@ -37,7 +37,7 @@
 	void RENDERER_show(game_s *game);
 
 	/**
-	 * @brief	test l'affichage
+	 * @brief	test l'affichage (init the renderer!)
 	 */
 	void RENDERER_test();
 
