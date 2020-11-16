@@ -8,12 +8,14 @@
 
 	// include
 	#include "stm32f1_adc.h"
+	#include "systick.h"
+	#include "stdbool.h"
 
 	// const
-	#define X1 ADC_1	//joystick n1
-	#define Y1 ADC_0
-	#define X2 ADC_9	//joystick n2
-	#define Y2 ADC_8
+	#define X1 ADC_0	//joystick n1
+	#define Y1 ADC_1
+	#define X2 ADC_8	//joystick n2
+	#define Y2 ADC_9
 
 	typedef enum {
 		HAUT,

@@ -2,19 +2,37 @@
  * Logical.c
  *
  *  Created on: 13 Oct 2020
- *      Author: Théo Malinge--Lecompte
+ *      Author: ThÃ©o Malinge--Lecompte
  */
 #include"Logical/Logical.h"
-#include "Abstract/Joystick/joystick.h"
-#include "stdbool.h"
-#include <stdlib.h>
+
 
 volatile static bool mur = false;
 static game_s game;
 static uint16_t s=10;
 
+
 static bool getWALL(int x, int y);
 static void sens_fantome();
+static void mouvement(JOYSTICK_direction direction);
+static void fantome_mvt();
+static state_game VerifierEtatJeu();
+
+state_game jeu(){
+	mouvement(JOYSTICK_getDirection(JOYSTICK2));
+	fantome_mvt();
+	return VerifierEtatJeu();
+}
+
+state_game VerifierEtatJeu(){
+	if (game.pacman->state == DEAD){
+		return MENU;
+	}
+	else {
+		return JEU;
+	}
+
+}
 
 
 void mouvement(JOYSTICK_direction direction){
@@ -28,14 +46,14 @@ void mouvement(JOYSTICK_direction direction){
 			y--;
 			if(mur==false){
 				ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_BLACK);
-				game.map[x][y].type = FREE;
+				game.map[x][y]= FREE;
 				y++;
 				ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_YELLOW);
-				if(game.map[x][y].type == FANTOME){
+				if(game.map[x][y] == FANTOME){
 					game.pacman->state = DEAD;
 				}
 				else{
-					game.map[x][y].type = PACMAN;
+					game.map[x][y] = PACMAN;
 				}
 
 			}
@@ -46,14 +64,14 @@ void mouvement(JOYSTICK_direction direction){
 			x--;
 			if(mur==false){
 				ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_BLACK);
-				game.map[x][y].type = FREE;
+				game.map[x][y] = FREE;
 				x++;
 				ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_YELLOW);
-				if(game.map[x][y].type == FANTOME){
+				if(game.map[x][y] == FANTOME){
 					game.pacman->state = DEAD;
 				}
 				else{
-					game.map[x][y].type = PACMAN;
+					game.map[x][y] = PACMAN;
 				}
 			}
 			break;
@@ -63,14 +81,14 @@ void mouvement(JOYSTICK_direction direction){
 			x++;
 			if(mur==false){
 				ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_BLACK);
-				game.map[x][y].type = FREE;
+				game.map[x][y]  = FREE;
 				x--;
 				ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_YELLOW);
-				if(game.map[x][y].type == FANTOME){
+				if(game.map[x][y]  == FANTOME){
 					game.pacman->state = DEAD;
 				}
 				else{
-					game.map[x][y].type = PACMAN;
+					game.map[x][y]  = PACMAN;
 				}
 			}
 			break;
@@ -80,14 +98,14 @@ void mouvement(JOYSTICK_direction direction){
 			y++;
 			if(mur==false){
 				ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_BLACK);
-				game.map[x][y].type = FREE;
+				game.map[x][y]  = FREE;
 				y--;
 				ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_YELLOW);
-				if(game.map[x][y].type == FANTOME){
+				if(game.map[x][y]  == FANTOME){
 					game.pacman->state = DEAD;
 				}
 				else{
-					game.map[x][y].type = PACMAN;
+					game.map[x][y]  = PACMAN;
 				}
 			}
 			break;
@@ -123,12 +141,12 @@ void sens_fantome(uint16_t* x,uint16_t* y){
 				ILI9341_DrawFilledRectangle((uint16_t)((*x)*s),(uint16_t)((*y)*s),(uint16_t)(((*x)+1)*s),(uint16_t)(((*y)+1)*s),ILI9341_COLOR_BLACK);
 				(*y)++;
 				ILI9341_DrawFilledRectangle((uint16_t)((*x)*s),(uint16_t)((*y)*s),(uint16_t)(((*x)+1)*s),(uint16_t)(((*y)+1)*s),ILI9341_COLOR_GREEN);
-				if(game.map[*x][*y].type == PACMAN){
+				if(game.map[*x][*y]  == PACMAN){
 					game.pacman->state = DEAD;
-					game.map[*x][*y].type = FANTOME;
+					game.map[*x][*y]  = FANTOME;
 				}
 				else{
-					game.map[*x][*y].type = FANTOME;
+					game.map[*x][*y]  = FANTOME;
 				}
 			}
 			break;
@@ -140,12 +158,12 @@ void sens_fantome(uint16_t* x,uint16_t* y){
 				ILI9341_DrawFilledRectangle((uint16_t)((*x)*s),(uint16_t)((*y)*s),(uint16_t)(((*x)+1)*s),(uint16_t)(((*y)+1)*s),ILI9341_COLOR_BLACK);
 				(*x)++;
 				ILI9341_DrawFilledRectangle((uint16_t)((*x)*s),(uint16_t)((*y)*s),(uint16_t)(((*x)+1)*s),(uint16_t)(((*y)+1)*s),ILI9341_COLOR_GREEN);
-				if(game.map[*x][*y].type == PACMAN){
+				if(game.map[*x][*y]  == PACMAN){
 					game.pacman->state = DEAD;
-					game.map[*x][*y].type = FANTOME;
+					game.map[*x][*y]  = FANTOME;
 				}
 				else{
-					game.map[*x][*y].type = FANTOME;
+					game.map[*x][*y]  = FANTOME;
 				}
 			}
 			break;
@@ -158,12 +176,12 @@ void sens_fantome(uint16_t* x,uint16_t* y){
 				ILI9341_DrawFilledRectangle((uint16_t)((*x)*s),(uint16_t)((*y)*s),(uint16_t)(((*x)+1)*s),(uint16_t)(((*y)+1)*s),ILI9341_COLOR_BLACK);
 				(*x)--;
 				ILI9341_DrawFilledRectangle((uint16_t)((*x)*s),(uint16_t)((*y)*s),(uint16_t)(((*x)+1)*s),(uint16_t)(((*y)+1)*s),ILI9341_COLOR_GREEN);
-				if(game.map[*x][*y].type == PACMAN){
+				if(game.map[*x][*y]  == PACMAN){
 					game.pacman->state = DEAD;
-					game.map[*x][*y].type = FANTOME;
+					game.map[*x][*y]  = FANTOME;
 				}
 				else{
-					game.map[*x][*y].type = FANTOME;
+					game.map[*x][*y]  = FANTOME;
 				}
 			}
 			break;
@@ -176,12 +194,12 @@ void sens_fantome(uint16_t* x,uint16_t* y){
 				ILI9341_DrawFilledRectangle((uint16_t)((*x)*s),(uint16_t)((*y)*s),(uint16_t)(((*x)+1)*s),(uint16_t)(((*y)+1)*s),ILI9341_COLOR_BLACK);
 				(*y)--;
 				ILI9341_DrawFilledRectangle((uint16_t)((*x)*s),(uint16_t)((*y)*s),(uint16_t)(((*x)+1)*s),(uint16_t)(((*y)+1)*s),ILI9341_COLOR_GREEN);
-				if(game.map[*x][*y].type == PACMAN){
+				if(game.map[*x][*y]  == PACMAN){
 					game.pacman->state = DEAD;
-					game.map[*x][*y].type = FANTOME;
+					game.map[*x][*y]  = FANTOME;
 				}
 				else{
-					game.map[*x][*y].type = FANTOME;
+					game.map[*x][*y]  = FANTOME;
 				}
 			}
 			break;
@@ -192,12 +210,14 @@ void sens_fantome(uint16_t* x,uint16_t* y){
 void initWALL(){
 	for(int i=0;i<LENGTH;i++){
 		for(int j=0;j<HEIGHT;j++){
+
 			//game.map[i][j].type = OBJECT;
 			ILI9341_DrawFilledRectangle((uint16_t)((i)*10),(uint16_t)(j*10),(uint16_t)((i+1)*10),(uint16_t)((j+1)*10),ILI9341_COLOR_BLACK);
 			//ILI9341_DrawPixel((uint16_t)((i*10)+5),(uint16_t)((j*10)+5),ILI9341_COLOR_WHITE);
 		}
 	}
 	for(int i=0;i<HEIGHT;i++){
+
 		//game.map[0][i].type = WALL;
 		ILI9341_DrawFilledRectangle((uint16_t)(310),(uint16_t)(i*10),(uint16_t)(320),(uint16_t)((i+1)*10),ILI9341_COLOR_BLUE);
 	}
@@ -227,7 +247,7 @@ void initMAP(){
 	}
 
 											//les murs
-	for(int x=0;x<2;x++){					//carré
+	for(int x=0;x<2;x++){					//carrÃ©
 		for(int y=0;y<2;y++){
 			game.map[15+x][11+y].type = WALL_WITH_PHANTOM;
 
@@ -360,7 +380,7 @@ void refreshMAP(){
 }
 
 bool getWALL(int x, int y){
-	if(game.map[x][y].type == WALL || game.map[x][y].type == WALL_WITH_PHANTOM){
+	if(game.map[x][y]  == WALL || game.map[x][y]  == WALL_WITH_PHANTOM){
 		return true;
 	}else{
 		return false;
