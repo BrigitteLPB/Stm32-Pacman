@@ -1,10 +1,5 @@
 #include "Display/menu.h"
 
-/*	typedef enum
-	{
-		JEU,
-		MENU
-	}state_e;*/
 
 
 void menu(){
@@ -21,6 +16,7 @@ void menu(){
 			state = jeu();
 			if (state == MENU){
 				initMenu();
+				refreshMAP();
 			}
 			break;
 	}
