@@ -68,7 +68,8 @@ int main(void)
 
 	ILI9341_Init();
 	initMenu();
-	//initWALL();
+
+  
 	/*--- TESTS ---*/
 	//JOYSTICK_test();
 
