@@ -18,6 +18,8 @@
 #include "Abstract/TFT/TFT_advanced.h"
 #include "Abstract/Button/button.h"
 
+#include "Display/Renderer/renderer.h"
+
 #include "Logical/type.h"
 
 void writeLED(bool_e b)
@@ -63,12 +65,27 @@ int main(void)
 	Systick_add_callback_function(&process_ms);
 
 	JOYSTICK_init();
+<<<<<<< HEAD
+=======
+//	TFT_init(TFT_LANDSCAPE_RIGTH);
+	TFT_avanced_init(TFT_LANDSCAPE_RIGTH);
+	BUTTON_init();
+	RENDERER_init();
+>>>>>>> Display
 
 	ILI9341_Init();
 	initWALL();
 	/*--- TESTS ---*/
+<<<<<<< HEAD
 	//JOYSTICK_test();
 
+=======
+//	JOYSTICK_test();
+//	TFT_test_basic();
+//	TFT_test_avanced();
+//	TEST_triangle();
+	RENDERER_test();
+>>>>>>> Display
 
 
 	while(1)	//boucle de t�che de fond

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+>>>>>>> Display
 <!DOCTYPE targetDefinitions [ 
 	<!ELEMENT targetDefinitions (board)>
 	<!ELEMENT board (name, dbgIF+, dbgDEV, mcuId)>
@@ -8,6 +12,7 @@
 	<!ELEMENT mcuId (#PCDATA)>
 	<!ATTLIST board id CDATA #REQUIRED>
 ]>
+<<<<<<< HEAD
 
 <targetDefinitions>
   <board id="nucleo-f103rb">
@@ -18,3 +23,15 @@
     <mcuId>stm32f103rbtx</mcuId>
   </board>
 </targetDefinitions>
+=======
+
+<targetDefinitions>
+  <board id="nucleo-f103rb">
+    <name>NUCLEO-F103RB</name>
+    <dbgIF>SWD</dbgIF>
+    <dbgIF>JTAG</dbgIF>
+    <dbgDEV>ST-Link</dbgDEV>
+    <mcuId>stm32f103rbtx</mcuId>
+  </board>
+</targetDefinitions>
+>>>>>>> Display
