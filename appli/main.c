@@ -17,10 +17,9 @@
 #include "Abstract/TFT/TFT_basic.h"
 #include "Abstract/TFT/TFT_advanced.h"
 #include "Abstract/Button/button.h"
+#include "Display/menu.h"
 
 #include "Logical/type.h"
-
-static void TEST_triangle();
 
 void writeLED(bool_e b)
 {
@@ -66,8 +65,10 @@ int main(void)
 
 	JOYSTICK_init();
 
+
 	ILI9341_Init();
-	initWALL();
+	initMenu();
+	//initWALL();
 	/*--- TESTS ---*/
 	//JOYSTICK_test();
 
@@ -77,12 +78,8 @@ int main(void)
 	{
 		if(!t){
 			t=1000;
-			mouvement(JOYSTICK_getDirection(JOYSTICK1));
-			fantome_mvt();
+			menu();
 		}
-/*		if(!t){
-			t=1000;
 
-		}*/
 	}
 }
