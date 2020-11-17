@@ -1,22 +1,24 @@
+
 /*
  * Logical.c
  *
  *  Created on: 13 Oct 2020
- *      Author: Théo Malinge--Lecompte
+ *      Author: Th�o Malinge--Lecompte
  */
-#include"Logical/Logical.h"
 
+#include"Logical/Logical.h"
 
 volatile static bool mur = false;
 static game_s game;
 static uint16_t s=10;
-
+static uint16_t score=0;
 
 static bool getWALL(int x, int y);
 static void sens_fantome();
 static void mouvement(JOYSTICK_direction direction);
 static void fantome_mvt();
 static state_game VerifierEtatJeu();
+static void refreshCELL(int x, int y);
 
 state_game jeu(){
 	mouvement(JOYSTICK_getDirection(JOYSTICK2));
@@ -45,8 +47,9 @@ void mouvement(JOYSTICK_direction direction){
 			mur=getWALL(x,y);
 			y--;
 			if(mur==false){
-				ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_BLACK);
+				score++;
 				game.map[x][y]= FREE;
+				refreshCELL(x,y);
 				y++;
 				ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_YELLOW);
 				if(game.map[x][y] == FANTOME){
@@ -63,8 +66,9 @@ void mouvement(JOYSTICK_direction direction){
 			mur=getWALL(x,y);
 			x--;
 			if(mur==false){
-				ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_BLACK);
+				score++;
 				game.map[x][y] = FREE;
+				refreshCELL(x,y);
 				x++;
 				ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_YELLOW);
 				if(game.map[x][y] == FANTOME){
@@ -80,8 +84,9 @@ void mouvement(JOYSTICK_direction direction){
 			mur=getWALL(x,y);
 			x++;
 			if(mur==false){
-				ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_BLACK);
+				score++;
 				game.map[x][y]  = FREE;
+				refreshCELL(x,y);
 				x--;
 				ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_YELLOW);
 				if(game.map[x][y]  == FANTOME){
@@ -97,8 +102,9 @@ void mouvement(JOYSTICK_direction direction){
 			mur=getWALL(x,y);
 			y++;
 			if(mur==false){
-				ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_BLACK);
+				score++;
 				game.map[x][y]  = FREE;
+				refreshCELL(x,y);
 				y--;
 				ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_YELLOW);
 				if(game.map[x][y]  == FANTOME){
@@ -138,9 +144,9 @@ void sens_fantome(uint16_t* x,uint16_t* y){
 			mur=getWALL(*x,*y);
 			(*y)--;
 			if(!mur){
-				ILI9341_DrawFilledRectangle((uint16_t)((*x)*s),(uint16_t)((*y)*s),(uint16_t)(((*x)+1)*s),(uint16_t)(((*y)+1)*s),ILI9341_COLOR_BLACK);
+				refreshCELL(x,y);
 				(*y)++;
-				ILI9341_DrawFilledRectangle((uint16_t)((*x)*s),(uint16_t)((*y)*s),(uint16_t)(((*x)+1)*s),(uint16_t)(((*y)+1)*s),ILI9341_COLOR_GREEN);
+				//ILI9341_DrawFilledRectangle((uint16_t)((*x)*s),(uint16_t)((*y)*s),(uint16_t)(((*x)+1)*s),(uint16_t)(((*y)+1)*s),ILI9341_COLOR_GREEN);
 				if(game.map[*x][*y]  == PACMAN){
 					game.pacman->state = DEAD;
 					game.map[*x][*y]  = FANTOME;
@@ -155,9 +161,9 @@ void sens_fantome(uint16_t* x,uint16_t* y){
 			mur=getWALL(*x,*y);
 			(*x)--;
 			if(!mur){
-				ILI9341_DrawFilledRectangle((uint16_t)((*x)*s),(uint16_t)((*y)*s),(uint16_t)(((*x)+1)*s),(uint16_t)(((*y)+1)*s),ILI9341_COLOR_BLACK);
+				refreshCELL(x,y);
 				(*x)++;
-				ILI9341_DrawFilledRectangle((uint16_t)((*x)*s),(uint16_t)((*y)*s),(uint16_t)(((*x)+1)*s),(uint16_t)(((*y)+1)*s),ILI9341_COLOR_GREEN);
+				//ILI9341_DrawFilledRectangle((uint16_t)((*x)*s),(uint16_t)((*y)*s),(uint16_t)(((*x)+1)*s),(uint16_t)(((*y)+1)*s),ILI9341_COLOR_GREEN);
 				if(game.map[*x][*y]  == PACMAN){
 					game.pacman->state = DEAD;
 					game.map[*x][*y]  = FANTOME;
@@ -173,9 +179,9 @@ void sens_fantome(uint16_t* x,uint16_t* y){
 			mur=getWALL(*x,*y);
 			(*x)++;
 			if(!mur){
-				ILI9341_DrawFilledRectangle((uint16_t)((*x)*s),(uint16_t)((*y)*s),(uint16_t)(((*x)+1)*s),(uint16_t)(((*y)+1)*s),ILI9341_COLOR_BLACK);
+				refreshCELL(x,y);
 				(*x)--;
-				ILI9341_DrawFilledRectangle((uint16_t)((*x)*s),(uint16_t)((*y)*s),(uint16_t)(((*x)+1)*s),(uint16_t)(((*y)+1)*s),ILI9341_COLOR_GREEN);
+				//ILI9341_DrawFilledRectangle((uint16_t)((*x)*s),(uint16_t)((*y)*s),(uint16_t)(((*x)+1)*s),(uint16_t)(((*y)+1)*s),ILI9341_COLOR_GREEN);
 				if(game.map[*x][*y]  == PACMAN){
 					game.pacman->state = DEAD;
 					game.map[*x][*y]  = FANTOME;
@@ -191,9 +197,9 @@ void sens_fantome(uint16_t* x,uint16_t* y){
 			mur=getWALL(*x,*y);
 			(*y)++;
 			if(!mur){
-				ILI9341_DrawFilledRectangle((uint16_t)((*x)*s),(uint16_t)((*y)*s),(uint16_t)(((*x)+1)*s),(uint16_t)(((*y)+1)*s),ILI9341_COLOR_BLACK);
+				refreshCELL(x,y);
 				(*y)--;
-				ILI9341_DrawFilledRectangle((uint16_t)((*x)*s),(uint16_t)((*y)*s),(uint16_t)(((*x)+1)*s),(uint16_t)(((*y)+1)*s),ILI9341_COLOR_GREEN);
+				//ILI9341_DrawFilledRectangle((uint16_t)((*x)*s),(uint16_t)((*y)*s),(uint16_t)(((*x)+1)*s),(uint16_t)(((*y)+1)*s),ILI9341_COLOR_GREEN);
 				if(game.map[*x][*y]  == PACMAN){
 					game.pacman->state = DEAD;
 					game.map[*x][*y]  = FANTOME;
@@ -206,177 +212,157 @@ void sens_fantome(uint16_t* x,uint16_t* y){
 	}
 }
 
-
-void initWALL(){
-	for(int i=0;i<LENGTH;i++){
-		for(int j=0;j<HEIGHT;j++){
-
-			//game.map[i][j].type = OBJECT;
-			ILI9341_DrawFilledRectangle((uint16_t)((i)*10),(uint16_t)(j*10),(uint16_t)((i+1)*10),(uint16_t)((j+1)*10),ILI9341_COLOR_BLACK);
-			//ILI9341_DrawPixel((uint16_t)((i*10)+5),(uint16_t)((j*10)+5),ILI9341_COLOR_WHITE);
-		}
-	}
-	for(int i=0;i<HEIGHT;i++){
-
-		//game.map[0][i].type = WALL;
-		ILI9341_DrawFilledRectangle((uint16_t)(310),(uint16_t)(i*10),(uint16_t)(320),(uint16_t)((i+1)*10),ILI9341_COLOR_BLUE);
-	}
-	for(int i=0;i<LENGTH;i++){
-		//game.map[i][HEIGHT-1].type = WALL;
-		ILI9341_DrawFilledRectangle((uint16_t)(i*10),(uint16_t)(0),(uint16_t)((i+1)*10),(uint16_t)(10),ILI9341_COLOR_BLUE);
-	}
-	for(int i=0;i<LENGTH;i++){
-		//game.map[i][0].type = WALL;
-		ILI9341_DrawFilledRectangle((uint16_t)(i*10),(uint16_t)(230),(uint16_t)((i+1)*10),(uint16_t)(240),ILI9341_COLOR_BLUE);
-	}
-	for(int i=0;i<HEIGHT;i++){
-		//game.map[LENGTH-1][i].type = WALL;
-		ILI9341_DrawFilledRectangle((uint16_t)(0),(uint16_t)(i*10),(uint16_t)(10),(uint16_t)((i+1)*10),ILI9341_COLOR_BLUE);
-	}
-}
-
 void initMAP(){
 	for(int i=0;i<LENGTH;i++){				//point + contours
 		for(int j=0;j<HEIGHT;j++){
-			game.map[i][j].type = OBJECT;
-			game.map[0][j].type = WALL;
-			game.map[i][HEIGHT-1].type = WALL;
-			game.map[i][0].type = WALL;
-			game.map[LENGTH-1][j].type = WALL;
+			game.map[i][j] = OBJECT;
+			game.map[0][j] = WALL;
+			game.map[i][HEIGHT-1] = WALL;
+			game.map[i][0] = WALL;
+			game.map[LENGTH-1][j] = WALL;
 		}
 	}
 
 											//les murs
 	for(int x=0;x<2;x++){					//carré
 		for(int y=0;y<2;y++){
-			game.map[15+x][11+y].type = WALL_WITH_PHANTOM;
+			game.map[15+x][11+y] = WALL_WITH_PHANTOM;
 
-			game.map[2+x][2+y].type = WALL;
-			game.map[28+x][2+y].type = WALL;
-			game.map[2+x][20+y].type = WALL;
-			game.map[28+x][20+y].type = WALL;
-			game.map[15+x][8+y].type = WALL;
-			game.map[15+x][14+y].type = WALL;
+			game.map[2+x][2+y] = WALL;
+			game.map[28+x][2+y] = WALL;
+			game.map[2+x][20+y] = WALL;
+			game.map[28+x][20+y] = WALL;
+			game.map[15+x][8+y] = WALL;
+			game.map[15+x][14+y] = WALL;
 		}
 	}
 	for(int y=7;y<17;y++){					//colonne de 10
-		game.map[2][y].type = WALL;
-		game.map[29][y].type = WALL;
+		game.map[2][y] = WALL;
+		game.map[29][y] = WALL;
 	}
 	for(int i=0;i<6;i++){					//longueur de 6
-		game.map[i+13][2].type = WALL;
-		game.map[i+13][21].type = WALL;
+		game.map[i+13][2] = WALL;
+		game.map[i+13][21] = WALL;
 
-		game.map[13][i+4].type = WALL;
-		game.map[13][i+14].type = WALL;
-		game.map[18][i+4].type = WALL;
-		game.map[18][i+14].type = WALL;
+		game.map[13][i+4] = WALL;
+		game.map[13][i+14] = WALL;
+		game.map[18][i+4] = WALL;
+		game.map[18][i+14] = WALL;
 
-		game.map[8][i+9].type = WALL;
-		game.map[23][i+9].type = WALL;
-	}/*
+		game.map[8][i+9] = WALL;
+		game.map[23][i+9] = WALL;
+	}
 	for(int i=0;i<4;i++){					//longueur de 4
-		game.map[i+3][5].type = WALL;
-		game.map[i+3][11].type = WALL;
-		game.map[i+3][12].type = WALL;
-		game.map[i+3][18].type = WALL;
-		game.map[i+25][5].type = WALL;
-		game.map[i+25][11].type = WALL;
-		game.map[i+25][12].type = WALL;
-		game.map[i+25][18].type = WALL;
+		game.map[i+3][5] = WALL;
+		game.map[i+3][11] = WALL;
+		game.map[i+3][12] = WALL;
+		game.map[i+3][18] = WALL;
+		game.map[i+25][5] = WALL;
+		game.map[i+25][11] = WALL;
+		game.map[i+25][12] = WALL;
+		game.map[i+25][18] = WALL;
 
-		game.map[i+8][2].type = WALL;
-		game.map[i+20][2].type = WALL;
-		game.map[i+8][21].type = WALL;
-		game.map[i+20][21].type = WALL;
-	}/*
+		game.map[i+8][2] = WALL;
+		game.map[i+20][2] = WALL;
+		game.map[i+8][21] = WALL;
+		game.map[i+20][21] = WALL;
+	}
 	for(int i=0;i<3;i++){					//longueur de 3
-		game.map[i+10][4].type = WALL;
-		game.map[i+19][4].type = WALL;
-		game.map[i+10][19].type = WALL;
-		game.map[i+19][19].type = WALL;
+		game.map[i+10][4] = WALL;
+		game.map[i+19][4] = WALL;
+		game.map[i+10][19] = WALL;
+		game.map[i+19][19] = WALL;
 
-		game.map[5][i+1].type = WALL;
-		game.map[6][i+1].type = WALL;
-		game.map[25][i+1].type = WALL;
-		game.map[26][i+1].type = WALL;
+		game.map[5][i+1] = WALL;
+		game.map[6][i+1] = WALL;
+		game.map[25][i+1] = WALL;
+		game.map[26][i+1] = WALL;
 
-		game.map[5][i+20].type = WALL;
-		game.map[6][i+20].type = WALL;
-		game.map[25][i+20].type = WALL;
-		game.map[26][i+20].type = WALL;
+		game.map[5][i+20] = WALL;
+		game.map[6][i+20] = WALL;
+		game.map[25][i+20] = WALL;
+		game.map[26][i+20] = WALL;
 
-		game.map[8][i+3].type = WALL;
-		game.map[23][i+3].type = WALL;
-		game.map[8][i+18].type = WALL;
-		game.map[23][i+18].type = WALL;
+		game.map[8][i+3] = WALL;
+		game.map[23][i+3] = WALL;
+		game.map[8][i+18] = WALL;
+		game.map[23][i+18] = WALL;
 
-		game.map[15][i+4].type = WALL;
-		game.map[16][i+4].type = WALL;
-		game.map[15][i+17].type = WALL;
-		game.map[16][i+17].type = WALL;
+		game.map[15][i+4] = WALL;
+		game.map[16][i+4] = WALL;
+		game.map[15][i+17] = WALL;
+		game.map[16][i+17] = WALL;
 
-		game.map[12][i+8].type = WALL;
-		game.map[19][i+8].type = WALL;
-		game.map[12][i+13].type = WALL;
-		game.map[19][i+13].type = WALL;
+		game.map[12][i+8] = WALL;
+		game.map[19][i+8] = WALL;
+		game.map[12][i+13] = WALL;
+		game.map[19][i+13] = WALL;
 
-		game.map[4][i+7].type = WALL;
-		game.map[6][i+7].type = WALL;
-		game.map[25][i+7].type = WALL;
-		game.map[27][i+7].type = WALL;
-		game.map[4][i+14].type = WALL;
-		game.map[6][i+14].type = WALL;
-		game.map[25][i+14].type = WALL;
-		game.map[27][i+14].type = WALL;
-	}/*
+		game.map[4][i+7] = WALL;
+		game.map[6][i+7] = WALL;
+		game.map[25][i+7] = WALL;
+		game.map[27][i+7] = WALL;
+		game.map[4][i+14] = WALL;
+		game.map[6][i+14] = WALL;
+		game.map[25][i+14] = WALL;
+		game.map[27][i+14] = WALL;
+	}
 	for(int i=0;i<2;i++){					//longueur de 2
-		game.map[i+9][9].type = WALL;
-		game.map[i+21][9].type = WALL;
-		game.map[i+9][14].type = WALL;
-		game.map[i+21][14].type = WALL;
+		game.map[i+9][9] = WALL;
+		game.map[i+21][9] = WALL;
+		game.map[i+9][14] = WALL;
+		game.map[i+21][14] = WALL;
 
-		game.map[i+9][7].type = WALL;
-		game.map[i+10][6].type = WALL;
-		game.map[i+20][17].type = WALL;
-		game.map[i+21][16].type = WALL;
-		game.map[i+20][6].type = WALL;
-		game.map[i+27][7].type = WALL;
-		game.map[i+9][16].type = WALL;
-		game.map[i+10][17].type = WALL;
+		game.map[i+9][7] = WALL;
+		game.map[i+10][6] = WALL;
+		game.map[i+20][17] = WALL;
+		game.map[i+21][16] = WALL;
+		game.map[i+20][6] = WALL;
+		game.map[i+27][7] = WALL;
+		game.map[i+9][16] = WALL;
+		game.map[i+10][17] = WALL;
 
-		game.map[10][i+11].type = WALL;
-		game.map[21][i+11].type = WALL;
+		game.map[10][i+11] = WALL;
+		game.map[21][i+11] = WALL;
 
-		game.map[14][i+11].type = WALL;
-		game.map[17][i+11].type = WALL;
+		game.map[14][i+11] = WALL;
+		game.map[17][i+11] = WALL;
 	}
 											//longueur de 1
-	game.map[1][5].type = WALL;
-	game.map[1][18].type = WALL;
-	game.map[30][5].type = WALL;
-	game.map[30][18].type = WALL;
-	game.map[7][7].type = WALL;
-	game.map[7][16].type = WALL;
-	game.map[24][7].type = WALL;
-	game.map[24][16].type = WALL;*/
+	game.map[1][5] = WALL;
+	game.map[1][18] = WALL;
+	game.map[30][5] = WALL;
+	game.map[30][18] = WALL;
+	game.map[7][7] = WALL;
+	game.map[7][16] = WALL;
+	game.map[24][7] = WALL;
+	game.map[24][16] = WALL;
 }
 
 void refreshMAP(){
-	//initWALL();
 	for(int i=0;i<LENGTH;i++){
 		for(int j=0;j<HEIGHT;j++){
-			if(game.map[i][j].type == WALL || game.map[i][j].type == WALL_WITH_PHANTOM){
+			if(game.map[i][j] == WALL || game.map[i][j] == WALL_WITH_PHANTOM){
 				ILI9341_DrawFilledRectangle((uint16_t)(i*10),(uint16_t)(j*10),(uint16_t)((i+1)*10),(uint16_t)((j+1)*10),ILI9341_COLOR_BLUE);
+			}
+			else if(game.map[i][j] == OBJECT){
+				ILI9341_DrawPixel((uint16_t)((i*10)+5),(uint16_t)((j*10)+5),ILI9341_COLOR_WHITE);
 			}
 			else{
 				ILI9341_DrawFilledRectangle((uint16_t)(i*10),(uint16_t)(j*10),(uint16_t)((i+1)*10),(uint16_t)((j+1)*10),ILI9341_COLOR_BLACK);
 			}
-			/*if(game.map[i][j].type == OBJECT){
-				ILI9341_DrawPixel((uint16_t)((i*10)+5),(uint16_t)((j*10)+5),ILI9341_COLOR_WHITE);
-			}*/
 		}
 	}
+}
+
+void refreshCELL(int x, int y){
+	if(game.map[x][y] == OBJECT){
+		ILI9341_DrawPixel((uint16_t)((x*10)+5),(uint16_t)((y*10)+5),ILI9341_COLOR_WHITE);
+	}
+	else{
+		ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_BLACK);
+	}
+
 }
 
 bool getWALL(int x, int y){

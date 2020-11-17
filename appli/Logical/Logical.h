@@ -15,14 +15,11 @@
 #include "stdbool.h"
 #include <stdlib.h>
 
-void initWALL();
+
 
 void fantome_mvt();
 void initMAP();
 void refreshMAP();
 state_game jeu();
-
-
-
 
 #endif /* LOGICAL_LOGICAL_H_ */
