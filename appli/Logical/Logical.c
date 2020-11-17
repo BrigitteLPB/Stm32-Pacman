@@ -7,9 +7,6 @@
  */
 
 #include"Logical/Logical.h"
-#include "Abstract/Joystick/joystick.h"
-#include "stdbool.h"
-#include <stdlib.h>
 
 volatile static bool mur = false;
 static game_s game;
