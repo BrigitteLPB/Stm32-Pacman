@@ -318,7 +318,7 @@ void initMAP(){
 		game.map[i+20][17] = WALL;
 		game.map[i+21][16] = WALL;
 		game.map[i+20][6] = WALL;
-		game.map[i+27][7] = WALL;
+		game.map[i+21][7] = WALL;
 		game.map[i+9][16] = WALL;
 		game.map[i+10][17] = WALL;
 
