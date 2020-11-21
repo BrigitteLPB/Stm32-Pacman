@@ -32,6 +32,8 @@ typedef struct{
 
 
 // global
+static volatile bool_e init = FALSE;
+
 	// every images for the game
 static TFT_object_s wall;
 static TFT_object_s ground;
@@ -85,20 +87,25 @@ static void PRIVATE_RENDERER_put_pacman(PACMAN_position pos, bool_e predator);
 
 // function
 void RENDERER_init(game_s *game){
-	PRIVATE_RENDERER_init_wall();
-	PRIVATE_RENDERER_init_ground();
-	PRIVATE_RENDERER_init_ghosts();
-	PRIVATE_RENDERER_init_pacman();
-	PRIVATE_RENDERER_init_point();
-	PRIVATE_RENDERER_init_fruit();
+	if(!init){
+		PRIVATE_RENDERER_init_wall();
+		PRIVATE_RENDERER_init_ground();
+		PRIVATE_RENDERER_init_ghosts();
+		PRIVATE_RENDERER_init_pacman();
+		PRIVATE_RENDERER_init_point();
+		PRIVATE_RENDERER_init_fruit();
 
-	game_copy = *game;
-	PRIVATE_RENDERER_show(game, TRUE);
+		game_copy = *game;
+		PRIVATE_RENDERER_show(game, TRUE);
+
+		init = TRUE;
+	}
 }
 
 void RENDERER_kill(void){
 	IMG_ALLOC_delete(ghosts.img.begin);
 	IMG_ALLOC_delete(pacman.begin);
+	init = FALSE;
 }
 
 void RENDERER_reset(game_s *game){
