@@ -1,16 +1,18 @@
-
 /*
  * Logical.c
  *
  *  Created on: 13 Oct 2020
- *      Author: Th�o Malinge--Lecompte
+ *      Author: Théo Malinge--Lecompte
  */
-
 #include"Logical/Logical.h"
+#include "Abstract/Joystick/joystick.h"
+#include "stdbool.h"
+#include <stdlib.h>
 
 volatile static bool mur = false;
 static game_s game;
 static uint16_t s=10;
+
 static uint16_t score=0;
 
 static bool getWALL(int x, int y);
@@ -224,7 +226,7 @@ void initMAP(){
 	}
 
 											//les murs
-	for(int x=0;x<2;x++){					//carré
+	for(int x=0;x<2;x++){					//carrÃ©
 		for(int y=0;y<2;y++){
 			game.map[15+x][11+y] = WALL_WITH_PHANTOM;
 

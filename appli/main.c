@@ -19,6 +19,8 @@
 #include "Abstract/Button/button.h"
 #include "Display/menu.h"
 
+#include "Display/Renderer/renderer.h"
+
 #include "Logical/type.h"
 
 void writeLED(bool_e b)
@@ -63,19 +65,19 @@ int main(void)
 	//On ajoute la fonction process_ms � la liste des fonctions appel�es automatiquement chaque ms par la routine d'interruption du p�riph�rique SYSTICK
 	Systick_add_callback_function(&process_ms);
 
+	TFT_avanced_init(TFT_LANDSCAPE_RIGTH);
 	JOYSTICK_init();
-
-
-	ILI9341_Init();
+	BUTTON_init();
 	initMenu();
-
   
 	/*--- TESTS ---*/
-	//JOYSTICK_test();
+//	JOYSTICK_test();
+//	TFT_test_basic();
+//	TFT_test_avanced();
+//	TEST_triangle();
+	RENDERER_test();
 
-
-
-	while(1)	//boucle de t�che de fond
+	while(1)	//boucle de tache de fond
 	{
 		if(!t){
 			t=1000;

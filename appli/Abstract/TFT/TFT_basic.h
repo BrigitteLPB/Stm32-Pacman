@@ -15,12 +15,13 @@
 	#include "tft_ili9341/stm32f1_ili9341.h"
 
 	// const
-	#define MAX_NB_POINTS		8				// nombre de points maximum par objet
+	#define MAX_NB_POINTS		10				// nombre de points maximum par objet
 	#define TFT_HEIGHT			ILI9341_HEIGHT	// hauteur de l'écran
 	#define	TFT_WIDTH			ILI9341_WIDTH	// largeur de l'écran
 
 	// énumération publique
 	typedef enum {
+		COLOR_NONE		= 0x0001,				// a color unused by the followed by the enums
 		COLOR_WHITE 	= ILI9341_COLOR_WHITE,
 		COLOR_BLACK 	= ILI9341_COLOR_BLACK,
 		COLOR_RED 		= ILI9341_COLOR_RED,
