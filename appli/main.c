@@ -17,7 +17,7 @@
 #include "Abstract/TFT/TFT_basic.h"
 #include "Abstract/TFT/TFT_advanced.h"
 #include "Abstract/Button/button.h"
-#include "Display/menu.h"
+//#include "Display/menu.h"
 
 #include "Display/Renderer/renderer.h"
 
@@ -68,20 +68,20 @@ int main(void)
 	TFT_avanced_init(TFT_LANDSCAPE_RIGTH);
 	JOYSTICK_init();
 	BUTTON_init();
-	initMenu();
+//	initMenu();
   
 	/*--- TESTS ---*/
 //	JOYSTICK_test();
 //	TFT_test_basic();
 //	TFT_test_avanced();
 //	TEST_triangle();
-	RENDERER_test();
+//	RENDERER_test();
 
 	while(1)	//boucle de tache de fond
 	{
 		if(!t){
 			t=1000;
-			menu();
+//			menu();
 		}
 
 	}
