@@ -6,8 +6,7 @@
 
 // include
 #include "joystick.h"
-#include "systick.h"
-#include "stdbool.h"
+
 
 static volatile bool FLAG_1S = false;
 
