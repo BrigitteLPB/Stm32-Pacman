@@ -13,7 +13,7 @@
 
 
 	// const
-	#define MAX_VALUES_COUNT	16		// max numbers catch
+	#define MAX_VALUES_COUNT	32		// max numbers catch
 
 	#define	ADC_RAND_PORT 		ADC_0	// the port used to generate rand
 	#define	ADC_REDUNDANCY_PORT ADC_1	// redundacy port used

@@ -37,6 +37,8 @@ static TFT_object_s wall;
 static TFT_object_s ground;
 static PRIVATE_img_ghosts_s ghosts;
 static TFT_image_s pacman;
+static TFT_object_s point;
+static TFT_image_s fruit;
 
 static game_s game_copy;
 
@@ -49,6 +51,14 @@ static void PRIVATE_RENDERER_init_ground();
 static void PRIVATE_RENDERER_init_ghosts();
 
 static void PRIVATE_RENDERER_init_pacman();
+
+static void PRIVATE_RENDERER_init_point();
+
+static void PRIVATE_RENDERER_init_fruit();
+
+static void PRIVATE_RENDERER_put_point(PACMAN_position pos);
+
+static void PRIVATE_RENDERER_put_fruit(PACMAN_position pos);
 
 static void PRIVATE_RENDERER_show(game_s* game, bool_e fullPrint);
 
@@ -79,6 +89,8 @@ void RENDERER_init(game_s *game){
 	PRIVATE_RENDERER_init_ground();
 	PRIVATE_RENDERER_init_ghosts();
 	PRIVATE_RENDERER_init_pacman();
+	PRIVATE_RENDERER_init_point();
+	PRIVATE_RENDERER_init_fruit();
 
 	game_copy = *game;
 	PRIVATE_RENDERER_show(game, TRUE);
@@ -116,8 +128,11 @@ void PRIVATE_RENDERER_show(game_s* game, bool_e fullPrint){
 					case FANTOME:
 						PRIVATE_RENDERER_put_ground(pos);
 						break;
-					case OBJECT:
-
+					case FRUIT:
+						PRIVATE_RENDERER_put_fruit(pos);
+						break;
+					case POINT:
+						PRIVATE_RENDERER_put_point(pos);
 						break;
 				}
 			}
@@ -195,6 +210,37 @@ void PRIVATE_RENDERER_init_pacman(){
 	TFT_fill_image(&pacman, datas);
 }
 
+void PRIVATE_RENDERER_init_point(){
+	TFT_init_object(&point);
+	point.color = COLOR_WHITE;
+	point.circle = TRUE;
+	point.nb_points = 2;
+	point.points[0].x = CASE_WIDTH/2;
+	point.points[0].y = CASE_HEIGHT/2;
+	point.points[1].x = (position) ((CASE_WIDTH)*0.25);
+	point.points[1].y = (position) ((CASE_HEIGHT)*0.25);
+}
+
+void PRIVATE_RENDERER_init_fruit(){
+	fruit = TFT_make_image((pos_s){0,0}, CASE_HEIGHT, CASE_WIDTH);
+
+	TFT_color_e datas[] = {
+		COLOR_NONE,		COLOR_NONE,		COLOR_NONE,		COLOR_NONE,		COLOR_NONE,		COLOR_NONE,		COLOR_NONE,		COLOR_GREEN,	COLOR_GREEN,	COLOR_NONE,
+		COLOR_NONE,		COLOR_NONE,		COLOR_NONE,		COLOR_NONE,		COLOR_NONE,		COLOR_NONE,		COLOR_GREEN,	COLOR_NONE,		COLOR_NONE,		COLOR_NONE,
+		COLOR_NONE,		COLOR_NONE,		COLOR_RED,		COLOR_RED, 		COLOR_NONE,		COLOR_GREEN,	COLOR_RED,		COLOR_RED,		COLOR_NONE,		COLOR_NONE,
+		COLOR_NONE,		COLOR_NONE,		COLOR_RED,		COLOR_RED, 		COLOR_RED,		COLOR_RED,		COLOR_RED,		COLOR_RED,		COLOR_NONE,		COLOR_NONE,
+		COLOR_NONE,		COLOR_NONE,		COLOR_RED,		COLOR_RED, 		COLOR_RED,		COLOR_RED,		COLOR_RED,		COLOR_RED,		COLOR_NONE,		COLOR_NONE,
+		COLOR_NONE,		COLOR_NONE,		COLOR_RED,		COLOR_RED, 		COLOR_RED,		COLOR_RED,		COLOR_RED,		COLOR_RED,		COLOR_NONE,		COLOR_NONE,
+		COLOR_NONE,		COLOR_NONE,		COLOR_RED,		COLOR_RED, 		COLOR_RED,		COLOR_RED,		COLOR_RED,		COLOR_RED,		COLOR_NONE,		COLOR_NONE,
+		COLOR_NONE,		COLOR_NONE,		COLOR_RED,		COLOR_RED, 		COLOR_RED,		COLOR_RED,		COLOR_RED,		COLOR_RED,		COLOR_NONE,		COLOR_NONE,
+		COLOR_NONE,		COLOR_NONE,		COLOR_NONE,		COLOR_NONE,		COLOR_NONE,		COLOR_NONE,		COLOR_NONE,		COLOR_NONE,		COLOR_NONE,		COLOR_NONE,
+		COLOR_NONE,		COLOR_NONE,		COLOR_NONE,		COLOR_NONE,		COLOR_NONE,		COLOR_NONE,		COLOR_NONE,		COLOR_NONE,		COLOR_NONE,		COLOR_NONE
+	};
+
+	TFT_fill_image(&fruit, datas);
+
+}
+
 void PRIVATE_RENDERER_put_wall(PACMAN_position pos){
 	uint16_t x = (uint16_t) (pos.x*CASE_WIDTH);
 	uint16_t y = (uint16_t) (pos.y*CASE_HEIGHT);
@@ -232,7 +278,27 @@ void PRIVATE_RENDERER_put_pacman(PACMAN_position pos, bool_e predator){
 	}else{
 		TFT_put_image(&pacman);
 	}
-	ghosts.img.position = (pos_s){0,0};
+
+	pacman.position = (pos_s){0,0};
+}
+
+void PRIVATE_RENDERER_put_point(PACMAN_position pos){
+	uint16_t x = (uint16_t)(pos.x*CASE_WIDTH);
+	uint16_t y = (uint16_t)(pos.y*CASE_HEIGHT);
+
+	TFT_move_object(&point, (position)x, (position)y);
+	TFT_draw_object(&point);
+
+	TFT_move_object(&point, (position)-x, (position)-y);
+}
+
+void PRIVATE_RENDERER_put_fruit(PACMAN_position pos){
+	fruit.position.x = (position) (pos.x * CASE_WIDTH);
+	fruit.position.y = (position)(pos.y * CASE_HEIGHT);
+
+	TFT_put_image(&fruit);
+
+	fruit.position = (pos_s){0,0};
 }
 
 void RENDERER_test(){
@@ -280,6 +346,12 @@ void RENDERER_test(){
 		// a ground
 		game.map[(RAND_get()%(LENGTH-2))+1][(RAND_get()%(HEIGHT-2))+1] = FREE;
 
+		// a fruit
+		game.map[(RAND_get()%(LENGTH-2))+1][(RAND_get()%(HEIGHT-2))+1] = FRUIT;
+
+		// a point
+		game.map[(RAND_get()%(LENGTH-2))+1][(RAND_get()%(HEIGHT-2))+1] = POINT;
+
 		// show
 		RENDERER_show(&game);
 
@@ -288,24 +360,5 @@ void RENDERER_test(){
 			RAND_catch_event();
 		}
 	}
-//
-//	game.map[game.pacman.pos.x][game.pacman.pos.y] = FREE;
-//	game.map[game.phantoms[0].pos.x][game.phantoms[0].pos.y] = FREE;
-//	game.map[game.phantoms[1].pos.x][game.phantoms[1].pos.y] = FREE;
-//	game.map[game.phantoms[2].pos.x][game.phantoms[2].pos.y] = FREE;
-//	game.map[game.phantoms[3].pos.x][game.phantoms[3].pos.y] = WALL;
-//
-//
-//	game.pacman.pos.y = 3;			game.map[game.pacman.pos.x][game.pacman.pos.y] = PACMAN;
-//	game.phantoms[0].pos.y = 4;		game.map[game.phantoms[0].pos.x][game.phantoms[0].pos.y] = FANTOME;
-//	game.phantoms[1].pos.y = 5;		game.map[game.phantoms[1].pos.x][game.phantoms[1].pos.y] = FANTOME;
-//	game.phantoms[2].pos.y = 6;		game.map[game.phantoms[2].pos.x][game.phantoms[2].pos.y] = FANTOME;
-//	game.phantoms[3].pos.y = 7;		game.map[game.phantoms[3].pos.x][game.phantoms[3].pos.x] = FANTOME;
-//
-//	game.map[game.phantoms[3].pos.x][game.phantoms[3].pos.y] = WALL_WITH_PHANTOM;
-//
-//	while(BUTTON_state_machine() == BUTTON_EVENT_NONE);
-//
-//	RENDERER_show(&game);
 }
 

@@ -31,7 +31,8 @@
 		WALL,		//cell where we have a wall
 		WALL_WITH_PHANTOM,	// phantom spawn area
 		FREE,		//cell with nothing on it
-		OBJECT,	//cell with a point on it
+		FRUIT,	//cell with a point on it
+		POINT,
 		PACMAN,
 		FANTOME
 	}cell_s;
