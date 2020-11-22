@@ -32,7 +32,9 @@
 		WALL_WITH_PHANTOM,	// phantom spawn area
 		FREE,		//cell with nothing on it
 		FRUIT,	//cell with a point on it
+		FANTOME_WITH_FRUIT,
 		POINT,
+		FANTOME_WITH_POINT,
 		PACMAN,
 		FANTOME
 	}cell_s;
@@ -74,7 +76,12 @@
 		pacman_s pacman;
 	}game_s;
 
-
+	typedef enum{
+		JEU,
+		//GAME_OVER,
+		//WIN,
+		MENU
+	}state_game;
 
 	// functions
 

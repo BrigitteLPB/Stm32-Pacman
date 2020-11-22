@@ -18,7 +18,7 @@ static volatile bool_e init = FALSE;
 
 static volatile bool_e RAND_capture = FALSE;
 
-#define TIME_TO_CATCH	10	// temp en ms avant la capture
+#define TIME_TO_CATCH	1	// temp en ms avant la capture
 
 
 // private prototype
@@ -56,11 +56,11 @@ void RAND_init(){
 
 void RAND_catch_event(){
 	if(RAND_capture){
-		uint16_t v = ADC_getValue(ADC_RAND_PORT);
+		uint16_t v = (uint16_t)ADC_getValue(ADC_RAND_PORT);
 		uint16_t r = 0;
 
 		if(v == 0){
-			r = ADC_getValue(ADC_REDUNDANCY_PORT);
+			r = (uint16_t)ADC_getValue(ADC_REDUNDANCY_PORT);
 		}
 
 		uint8_t compute_value = (uint8_t) (n << 2 | (v + r));
