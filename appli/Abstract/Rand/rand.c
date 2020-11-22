@@ -18,7 +18,7 @@ static volatile bool_e init = FALSE;
 
 static volatile bool_e RAND_capture = FALSE;
 
-#define TIME_TO_CATCH	1	// temp en ms avant la capture
+#define TIME_TO_CATCH	10	// temp en ms avant la capture
 
 
 // private prototype
