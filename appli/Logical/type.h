@@ -2,7 +2,7 @@
  * type.h
  *
  *  Created on: 6 Oct 2020
- *      Author: ThÃ©o Malinge--Lecompte
+ *      Author: Théo Malinge--Lecompte
  */
 
 #ifndef LOGICAL_TYPE_H_

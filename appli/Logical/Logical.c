@@ -2,7 +2,7 @@
  * Logical.c
  *
  *  Created on: 13 Oct 2020
- *      Author: ThÃ©o Malinge--Lecompte
+ *      Author: Théo Malinge--Lecompte
  */
 #include"Logical/Logical.h"
 // include
@@ -85,7 +85,6 @@ state_game VerifierEtatJeu(){
 	}else {
 		return JEU;
 	}
-
 }
 
 
@@ -333,7 +332,7 @@ void sens_fantome(phantom_s *phantom){
 				break;
 		}
 
-		sens = (sens+1)%4;
+		sens = (uint8_t)((sens+1)%4);
 	}
 
 	if(game.pacman.pos.x == phantom->pos.x && game.pacman.pos.y == phantom->pos.y){

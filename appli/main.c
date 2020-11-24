@@ -18,6 +18,7 @@
 //#include "Display/menu.h"
 
 #include "Display/Renderer/renderer.h"
+#include "Display/menu.h"
 
 #include "Logical/type.h"
 #include "Logical/Logical.h"
@@ -37,7 +38,7 @@ int main(void)
 {
 	//Initialisation de la couche logicielle HAL (Hardware Abstraction Layer)
 	//Cette ligne doit rester la premi�re �tape de la fonction main().
-	HAL_Init();
+   	HAL_Init();
 
 
 	//Initialisation de l'UART2 � la vitesse de 115200 bauds/secondes (92kbits/s) PA2 : Tx  | PA3 : Rx.
@@ -54,11 +55,13 @@ int main(void)
 	//Initialisation du port du bouton bleu (carte Nucleo)
 	BSP_GPIO_PinCfg(BLUE_BUTTON_GPIO, BLUE_BUTTON_PIN, GPIO_MODE_INPUT,GPIO_PULLUP,GPIO_SPEED_FREQ_HIGH);
 
+
+	/*--- INIT ---*/
 	TFT_avanced_init(TFT_LANDSCAPE_RIGTH);
 	JOYSTICK_init();
 	BUTTON_init();
-//	initMenu();
-	LOGICAL_init();
+	initMenu();
+
   
 	/*--- TESTS ---*/
 //	JOYSTICK_test();
@@ -69,6 +72,6 @@ int main(void)
 
 	while(1)	//boucle de tache de fond
 	{
-		jeu();
+		menu();
 	}
 }

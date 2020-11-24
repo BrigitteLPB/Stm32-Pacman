@@ -10,8 +10,8 @@
 #include "stm32f1xx_hal.h"
 
 //Choix de la cible utilisée.
-#define NUCLEO	1
-#define BLUEPILL 0
+#define NUCLEO	0
+#define BLUEPILL 1
 
 
 #define TRACE	0		//permet le débogage sur un simulateur QEMU. Doit rester à 0 par défaut.
@@ -57,7 +57,7 @@
 
 //Ci dessous, les defines permettant d'activer les modules de la librairie.
 //Attention, s'ils sont tous activés, le code compilé est trop volumineux pour rentrer dans la mémoire de 64kio du STM32F103C8T6 la Bluepill.
-//Le STM32F103RBT6 de la carte Nucleo dispose quant à lui d'une mémoire de 128kio de flash.
+//Le STM32F103RBT6 de la carte Nucleo dispose quant à lui d'une mémoire de 128ko de flash.
 
 #define USE_BSP_EXTIT			1 //Utilisation du module de gestion des it externe : stm32f1_extit.c/h
 
