@@ -16,6 +16,6 @@
 
 	void LOGICAL_kill(void);
 
-	state_game jeu();
+	state_game jeu(uint16_t *score);
 
 #endif /* LOGICAL_LOGICAL_H_ */

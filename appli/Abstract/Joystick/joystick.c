@@ -22,11 +22,17 @@ static volatile bool FLAG_1S = false;
 
 // private function
 	JOYSTICK_direction PRIVATE_JOYSTICK_getDirection(ADC_CHANNEL X, ADC_CHANNEL Y){
-		int16_t X_value = (int16_t)(ADC_getValue(X)-MILIEU);
-		//printf("X value : %d\n",MILIEU);
-		int16_t Y_value = (int16_t)(ADC_getValue(Y)-MILIEU);
+		static int16_t X_value;
+		static int16_t Y_value;
+
+		if(ADC_is_new_sample_available()){
+			X_value = (int16_t)(ADC_getValue(X)-MILIEU);
+			Y_value = (int16_t)(ADC_getValue(Y)-MILIEU);
+		}
+
 		printf("X value : %d\n",X_value);
 		printf("Y value : %d\n",Y_value);
+
 		if (Y_value<TOLERANCE_MIN && abs(Y_value)>abs(X_value)){
 			return BAS;
 		}

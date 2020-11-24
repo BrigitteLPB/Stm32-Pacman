@@ -49,7 +49,7 @@
 
 	typedef struct {
 		PACMAN_position pos;
-		uint8_t score;
+		uint16_t score;
 		type_state_pacman state;
 	}pacman_s;
 
@@ -70,7 +70,7 @@
 // map
 	typedef struct{
 		uint8_t phantom_count;
-		uint8_t points_count;	// 0 -> win
+		uint16_t points_count;
 		cell_s map[LENGTH][HEIGHT];
 		phantom_s phantoms[MAX_PHANTOM];
 		pacman_s pacman;

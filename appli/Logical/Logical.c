@@ -68,14 +68,15 @@ void LOGICAL_kill(void){
 	init = FALSE;
 }
 
-state_game jeu(){
+state_game jeu(uint16_t *score){
 	if(MS_FLAGS){
-		mouvement(JOYSTICK_getDirection(JOYSTICK2));
+		mouvement(JOYSTICK_getDirection(JOYSTICK1));
 		fantome_mvt();
 		RENDERER_show(&game);
 	}
 
 	RAND_catch_event();
+	*score = game.pacman.score;
 	return VerifierEtatJeu();
 }
 
