@@ -31,18 +31,15 @@
 		WALL,		//cell where we have a wall
 		WALL_WITH_PHANTOM,	// phantom spawn area
 		FREE,		//cell with nothing on it
-		OBJECT,	//cell with a point on it
+		FRUIT,	//cell with a point on it
+		FANTOME_WITH_FRUIT,
+		POINT,
+		FANTOME_WITH_POINT,
 		PACMAN,
 		FANTOME
 	}cell_s;
 
-	// object / caracter
 
-	typedef struct {
-		void* data;
-	}object_s;
-
-// ojects
 	// pacman
 	typedef enum{
 		ALIVE,
@@ -75,8 +72,8 @@
 		uint8_t phantom_count;
 		uint8_t points_count;	// 0 -> win
 		cell_s map[LENGTH][HEIGHT];
-		phantom_s *phantoms[MAX_PHANTOM];
-		pacman_s *pacman;
+		phantom_s phantoms[MAX_PHANTOM];
+		pacman_s pacman;
 	}game_s;
 
 	typedef enum{
@@ -85,8 +82,6 @@
 		//WIN,
 		MENU
 	}state_game;
-
-
 
 	// functions
 

@@ -11,15 +11,16 @@
 #include "stm32f1_sys.h"
 #include "stm32f1_gpio.h"
 #include "macro_types.h"
-#include "systick.h"
 
 #include "Abstract/Joystick/joystick.h"
-#include "Abstract/TFT/TFT_basic.h"
 #include "Abstract/TFT/TFT_advanced.h"
 #include "Abstract/Button/button.h"
-#include "Display/menu.h"
+//#include "Display/menu.h"
+
+#include "Display/Renderer/renderer.h"
 
 #include "Logical/type.h"
+#include "Logical/Logical.h"
 
 void writeLED(bool_e b)
 {
@@ -29,13 +30,6 @@ void writeLED(bool_e b)
 bool_e readButton(void)
 {
 	return !HAL_GPIO_ReadPin(BLUE_BUTTON_GPIO, BLUE_BUTTON_PIN);
-}
-
-static volatile uint32_t t = 0;
-void process_ms(void)
-{
-	if(t)
-		t--;
 }
 
 
@@ -60,27 +54,21 @@ int main(void)
 	//Initialisation du port du bouton bleu (carte Nucleo)
 	BSP_GPIO_PinCfg(BLUE_BUTTON_GPIO, BLUE_BUTTON_PIN, GPIO_MODE_INPUT,GPIO_PULLUP,GPIO_SPEED_FREQ_HIGH);
 
-	//On ajoute la fonction process_ms � la liste des fonctions appel�es automatiquement chaque ms par la routine d'interruption du p�riph�rique SYSTICK
-	Systick_add_callback_function(&process_ms);
-
+	TFT_avanced_init(TFT_LANDSCAPE_RIGTH);
 	JOYSTICK_init();
-
-
-	ILI9341_Init();
-	initMenu();
-
+	BUTTON_init();
+//	initMenu();
+	LOGICAL_init();
   
 	/*--- TESTS ---*/
-	//JOYSTICK_test();
+//	JOYSTICK_test();
+//	TFT_test_basic();
+//	TFT_test_avanced();
+//	TEST_triangle();
+//	RENDERER_test();
 
-
-
-	while(1)	//boucle de t�che de fond
+	while(1)	//boucle de tache de fond
 	{
-		if(!t){
-			t=1000;
-			menu();
-		}
-
+		jeu();
 	}
 }

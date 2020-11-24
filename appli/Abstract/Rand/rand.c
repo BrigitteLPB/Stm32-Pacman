@@ -46,16 +46,21 @@ void RAND_init(){
 		index=0;
 
 		init = TRUE;
+
+		// filled up the values
+		while(index < MAX_VALUES_COUNT){
+			RAND_catch_event();
+		}
 	}
 }
 
 void RAND_catch_event(){
 	if(RAND_capture){
-		uint16_t v = ADC_getValue(ADC_RAND_PORT);
+		uint16_t v = (uint16_t)ADC_getValue(ADC_RAND_PORT);
 		uint16_t r = 0;
 
 		if(v == 0){
-			r = ADC_getValue(ADC_REDUNDANCY_PORT);
+			r = (uint16_t)ADC_getValue(ADC_REDUNDANCY_PORT);
 		}
 
 		uint8_t compute_value = (uint8_t) (n << 2 | (v + r));
