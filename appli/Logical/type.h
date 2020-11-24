@@ -2,7 +2,7 @@
  * type.h
  *
  *  Created on: 6 Oct 2020
- *      Author: ThÃ©o Malinge--Lecompte
+ *      Author: Théo Malinge--Lecompte
  */
 
 #ifndef LOGICAL_TYPE_H_
@@ -31,18 +31,15 @@
 		WALL,		//cell where we have a wall
 		WALL_WITH_PHANTOM,	// phantom spawn area
 		FREE,		//cell with nothing on it
-		OBJECT,		//cell with a point on it
+		FRUIT,	//cell with a point on it
+		FANTOME_WITH_FRUIT,
+		POINT,
+		FANTOME_WITH_POINT,
 		PACMAN,
 		FANTOME
 	}cell_s;
 
-	// object / caracter
 
-	typedef struct {
-		void* data;
-	}object_s;
-
-// ojects
 	// pacman
 	typedef enum{
 		ALIVE,
@@ -85,8 +82,6 @@
 		//WIN,
 		MENU
 	}state_game;
-
-
 
 	// functions
 

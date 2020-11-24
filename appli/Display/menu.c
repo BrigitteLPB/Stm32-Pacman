@@ -7,8 +7,7 @@ void menu(){
 	switch(state){
 		case MENU:
 			if(JOYSTICK_getDirection(JOYSTICK2)== DROITE){
-				initMAP();
-				refreshMAP();
+				LOGICAL_init();
 				state = JEU;
 			}
 			break;
@@ -16,7 +15,6 @@ void menu(){
 			state = jeu();
 			if (state == MENU){
 				initMenu();
-				refreshMAP();
 			}
 			break;
 	}
