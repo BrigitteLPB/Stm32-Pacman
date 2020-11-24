@@ -22,8 +22,10 @@ void menu(){
 			state = jeu();
 			if (state == MENU){
 				initMenu();
+				LOGICAL_kill();
 			}else if(state == WIN){
 				winMenu();
+				LOGICAL_kill();
 			}
 			break;
 

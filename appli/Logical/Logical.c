@@ -106,7 +106,7 @@ void mouvement(JOYSTICK_direction direction){
 			pos.y--;
 			if(mur==FALSE){
 //				score++;
-//				game.map[pos.x][pos.y]= FREE;
+				game.map[pos.x][pos.y]= FREE;
 //				refreshCELL(x,y);
 				pos.y++;
 //				ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_YELLOW);
@@ -126,7 +126,7 @@ void mouvement(JOYSTICK_direction direction){
 			pos.x--;
 			if(!mur){
 //				score++;
-//				game.map[pos.x][pos.y] = FREE;
+				game.map[pos.x][pos.y] = FREE;
 //				refreshCELL(x,y);
 				pos.x++;
 //				ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_YELLOW);
@@ -144,7 +144,7 @@ void mouvement(JOYSTICK_direction direction){
 			pos.x++;
 			if(!mur){
 //				score++;
-//				game.map[pos.x][pos.y]  = FREE;
+				game.map[pos.x][pos.y]  = FREE;
 //				refreshCELL(x,y);
 				pos.x--;
 //				ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_YELLOW);
@@ -162,7 +162,7 @@ void mouvement(JOYSTICK_direction direction){
 			pos.y++;
 			if(!mur){
 //				score++;
-//				game.map[pos.x][pos.y]  = FREE;
+				game.map[pos.x][pos.y]  = FREE;
 //				refreshCELL(x,y);
 				pos.y--;
 //				ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_YELLOW);
@@ -365,7 +365,7 @@ void initMAP(){
 	game.pacman.pos.y = 1;
 	game.pacman.pos.x = 1;
 
-	game.points_count = 32;				// nombre de point sur le terrain
+	game.points_count = 384;				// nombre de point sur le terrain
 
 	for(int i=0;i<LENGTH;i++){				//point + contours
 		for(int j=0;j<HEIGHT;j++){
