@@ -62,7 +62,7 @@ void SPI_Init(SPI_TypeDef* SPIx)
 	}
 	//Configuration of the SPIx module
 	hSPI[id].Instance = SPIx;
-	hSPI[id].Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
+	hSPI[id].Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;//8
 	hSPI[id].Init.CLKPhase = SPI_PHASE_1EDGE;
 	hSPI[id].Init.CLKPolarity = SPI_POLARITY_LOW;
 	hSPI[id].Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;

@@ -13,11 +13,14 @@
 #include "../Display/Renderer/renderer.h"
 
 // const
-#define	TIME_TO_UPDATE		500		// temps en ms avant une update du jeu
+#define	TIME_TO_UPDATE		350							// temps en ms avant une update du jeu
+//#define INPUT_COUNT			TIME_TO_UPDATE/10		// intervalle avant de perdre l'input
+//#define INPUT_LIVE			3
 
 // global var
 static volatile bool_e init = FALSE;
-static volatile bool_e MS_FLAGS;
+static volatile bool_e MS_FLAGS = FALSE;
+static volatile bool_e EVENT_COUNT = FALSE;
 
 static volatile bool_e mur = FALSE;
 static game_s game;
@@ -36,12 +39,12 @@ static void fantome_mvt();
 static state_game VerifierEtatJeu();
 //static void refreshCELL(int x, int y);
 static bool_e PRIVATE_LOGICAL_phantom_contact(PACMAN_position pos);
+//static void PRIVATE_LOGICAL_direction_remanente(JOYSTICK_direction *dir);
 
 
 // function
 void PRIVATE_LOGICAL_process_ms(){
 	static uint32_t t=0;
-
 	if(t == TIME_TO_UPDATE){
 		MS_FLAGS = TRUE;
 		t=0;
@@ -49,6 +52,15 @@ void PRIVATE_LOGICAL_process_ms(){
 		t++;
 		MS_FLAGS = FALSE;
 	}
+
+	static uint32_t t2=0;
+//	if(t2 == INPUT_COUNT){
+//		EVENT_COUNT = TRUE;
+//		t2=0;
+//	}else{
+//		t2++;
+//		EVENT_COUNT = FALSE;
+//	}
 }
 
 void LOGICAL_init(void){
@@ -69,8 +81,13 @@ void LOGICAL_kill(void){
 }
 
 state_game jeu(uint16_t *score){
+	static JOYSTICK_direction dir = NEUTRE;
+
+	dir = JOYSTICK_getDirection(JOYSTICK2);
+//	PRIVATE_LOGICAL_direction_remanente(&dir);
+
 	if(MS_FLAGS){
-		mouvement(JOYSTICK_getDirection(JOYSTICK1));
+		mouvement(dir);
 		fantome_mvt();
 		RENDERER_show(&game);
 	}
@@ -79,6 +96,24 @@ state_game jeu(uint16_t *score){
 	*score = game.pacman.score;
 	return VerifierEtatJeu();
 }
+
+//void PRIVATE_LOGICAL_direction_remanente(JOYSTICK_direction *dir)
+//{
+//	static JOYSTICK_direction last_dir = NEUTRE;
+//	static uint8_t live = INPUT_LIVE;
+//
+//	if(INPUT_COUNT){
+//		if(*dir != NEUTRE && last_dir != *dir){
+//			last_dir = *dir;
+//			live = INPUT_LIVE;
+//		}else if(live == 0){
+//			*dir = NEUTRE;
+//		}else{
+//			live--;
+//		}
+//	}
+//
+//}
 
 state_game VerifierEtatJeu(){
 	if (game.pacman.state == DEAD){
@@ -360,7 +395,8 @@ void sens_fantome(phantom_s *phantom){
 }
 
 void initMAP(){
-	game.points_count = 384;				// nombre de point sur le terrain
+	game.points_count = 379;				// nombre de point sur le terrain
+//	game.points_count = 36;
 
 	for(int i=0;i<LENGTH;i++){				//point + contours
 		for(int j=0;j<HEIGHT;j++){

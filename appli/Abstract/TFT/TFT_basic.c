@@ -18,6 +18,8 @@ typedef struct {
 
 
 // prototype de fonction privé
+static bool_e PRIVATE_TFT_is_rectangle(TFT_object_s *object);
+
 /**
  * @brief			dessine un triangle rempli
  * @param	point_1	premier point
@@ -94,17 +96,31 @@ void TFT_draw_object(TFT_object_s *object){
 	//init
 
 	//code
-	if(object->circle == TRUE && object->nb_points == 2){
-		PRIVATE_TFT_draw_circle(object);
-	}else if( object->nb_points == 0){
-		return;
-	}else{
-		if( object->filled ){
-			PRIVATE_TFT_draw_object_fill(object);
+	if(object->color != COLOR_NONE){
+		if(object->circle == TRUE && object->nb_points == 2){
+			PRIVATE_TFT_draw_circle(object);
+		}else if( object->nb_points == 0){
+			return;
+		}else if(object->nb_points == 4 && PRIVATE_TFT_is_rectangle(object)){
+			ILI9341_DrawFilledRectangle((uint16_t) object->points[0].x, (uint16_t) object->points[0].y, (uint16_t) object->points[2].x, (uint16_t) object->points[2].y, (uint16_t) object->color);
 		}else{
-			PRIVATE_TFT_draw_object_line(object);
+			if( object->filled){
+				PRIVATE_TFT_draw_object_fill(object);
+			}else{
+				PRIVATE_TFT_draw_object_line(object);
+			}
 		}
 	}
+}
+
+bool_e PRIVATE_TFT_is_rectangle(TFT_object_s *object){
+	if (object->points[0].x == object->points[3].x && object->points[1].x == object->points[2].x){ // x
+		if(object->points[0].y == object->points[1].y && object->points[3].y == object->points[2].y){ // y
+			return TRUE;
+		}
+	}
+
+	return FALSE;
 }
 
 void TFT_move_object(TFT_object_s *object, position x_inc, position y_inc){

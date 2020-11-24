@@ -12,6 +12,8 @@
 	#include "stdbool.h"
 
 	// const
+	#define SHOW_ON_UART	0		// 1: output the data on UART
+
 	#define X1 ADC_0	//joystick n1
 	#define Y1 ADC_1
 	#define X2 ADC_8	//joystick n2

@@ -229,9 +229,15 @@ void PRIVATE_RENDERER_init_ground(){
 void PRIVATE_RENDERER_init_ghosts(){
 	ghosts.img = TFT_make_image((pos_s){0,0}, CASE_HEIGHT, CASE_WIDTH);
 	ghosts.colors[0] = COLOR_RED;
-	ghosts.colors[1] = COLOR_MAGENTA;
+	ghosts.colors[1] = COLOR_GREEN;
 	ghosts.colors[2] = COLOR_CYAN;
-	ghosts.colors[3] = COLOR_ORANGE;
+	ghosts.colors[3] = COLOR_WHITE;
+
+//	ghosts.colors[0] = COLOR_NONE;
+//	ghosts.colors[1] = COLOR_NONE;
+//	ghosts.colors[2] = COLOR_NONE;
+//	ghosts.colors[3] = COLOR_NONE;
+
 
 	TFT_color_e datas[] = {
 		COLOR_NONE, COLOR_NONE, ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], COLOR_NONE, COLOR_NONE,

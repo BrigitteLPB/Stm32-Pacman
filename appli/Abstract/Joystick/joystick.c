@@ -30,8 +30,10 @@ static volatile bool FLAG_1S = false;
 			Y_value = (int16_t)(ADC_getValue(Y)-MILIEU);
 		}
 
-		printf("X value : %d\n",X_value);
-		printf("Y value : %d\n",Y_value);
+		#if OUTPUT_UART
+			printf("X value : %d\n",X_value);
+			printf("Y value : %d\n",Y_value);
+		#endif
 
 		if (Y_value<TOLERANCE_MIN && abs(Y_value)>abs(X_value)){
 			return BAS;
