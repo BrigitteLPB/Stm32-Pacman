@@ -18,6 +18,7 @@
 //#include "Display/menu.h"
 
 #include "Display/Renderer/renderer.h"
+#include "Display/menu.h"
 
 #include "Logical/type.h"
 #include "Logical/Logical.h"
@@ -57,8 +58,8 @@ int main(void)
 	TFT_avanced_init(TFT_LANDSCAPE_RIGTH);
 	JOYSTICK_init();
 	BUTTON_init();
-//	initMenu();
-	LOGICAL_init();
+	initMenu();
+
   
 	/*--- TESTS ---*/
 //	JOYSTICK_test();
@@ -69,6 +70,6 @@ int main(void)
 
 	while(1)	//boucle de tache de fond
 	{
-		jeu();
+		menu();
 	}
 }
