@@ -85,7 +85,6 @@ state_game VerifierEtatJeu(){
 	}else {
 		return JEU;
 	}
-
 }
 
 
