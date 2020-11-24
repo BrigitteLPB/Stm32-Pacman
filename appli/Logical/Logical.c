@@ -53,7 +53,7 @@ void PRIVATE_LOGICAL_process_ms(){
 		MS_FLAGS = FALSE;
 	}
 
-	static uint32_t t2=0;
+//	static uint32_t t2=0;
 //	if(t2 == INPUT_COUNT){
 //		EVENT_COUNT = TRUE;
 //		t2=0;

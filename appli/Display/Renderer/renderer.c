@@ -28,6 +28,7 @@ typedef enum {
 typedef struct{
 	TFT_color_e colors[4];
 	TFT_image_s img;
+	bool_e invisible;
 }PRIVATE_img_ghosts_s;
 
 
