@@ -22,7 +22,7 @@ static volatile bool_e MS_FLAGS;
 static volatile bool_e mur = FALSE;
 static game_s game;
 //static uint16_t s = 10;
-static uint16_t score = 0;
+volatile uint16_t score = 0;
 
 
 // private function

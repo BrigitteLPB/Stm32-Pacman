@@ -9,6 +9,7 @@ void menu(){
 			if(JOYSTICK_getDirection(JOYSTICK2)== DROITE){
 				LOGICAL_init();
 				state = JEU;
+				score = 0;
 			}
 			break;
 		case JEU:
@@ -26,5 +27,6 @@ void initMenu(){
 	TFT_clear(COLOR_BLACK);
 	TFT_text_s text = TFT_make_text("New game", (pos_s){60,140}, FONT_16x26, COLOR_WHITE, COLOR_BLACK);
 	TFT_put_text(&text);
-
+	TFT_text_s text_score = TFT_make_text ("score : "+score,(pos_s){160,140}, FONT_16x26, COLOR_WHITE, COLOR_BLACK);
+	TFT_put_text(&text_score);
 }

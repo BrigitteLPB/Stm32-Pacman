@@ -13,8 +13,8 @@ static volatile bool FLAG_1S = false;
 // const
 	typedef adc_id_e ADC_CHANNEL;
 	#define MILIEU (uint16_t) 1850
-	#define TOLERANCE_MAX 500
-	#define TOLERANCE_MIN -500
+	#define TOLERANCE_MAX 250
+	#define TOLERANCE_MIN -250
 	#define abs(x) ((x<0)?-x:x)
 
 //prototype
