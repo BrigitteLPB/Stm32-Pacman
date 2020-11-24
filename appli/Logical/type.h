@@ -71,6 +71,7 @@
 	typedef struct{
 		uint8_t phantom_count;
 		uint16_t points_count;
+		bool_e hard;
 		cell_s map[LENGTH][HEIGHT];
 		phantom_s phantoms[MAX_PHANTOM];
 		pacman_s pacman;

@@ -12,7 +12,7 @@
 	#include "Abstract/Joystick/joystick.h"
 	#include "type.h"
 
-	void LOGICAL_init(void);
+	void LOGICAL_init(bool_e hard);
 
 	void LOGICAL_kill(void);
 

@@ -50,7 +50,7 @@ static void PRIVATE_RENDERER_init_wall();
 
 static void PRIVATE_RENDERER_init_ground();
 
-static void PRIVATE_RENDERER_init_ghosts();
+static void PRIVATE_RENDERER_init_ghosts(bool_e hard);
 
 static void PRIVATE_RENDERER_init_pacman();
 
@@ -98,7 +98,7 @@ void RENDERER_init(game_s *game){
 	if(!init){
 		PRIVATE_RENDERER_init_wall();
 		PRIVATE_RENDERER_init_ground();
-		PRIVATE_RENDERER_init_ghosts();
+		PRIVATE_RENDERER_init_ghosts(game->hard);
 		PRIVATE_RENDERER_init_pacman();
 		PRIVATE_RENDERER_init_point();
 		PRIVATE_RENDERER_init_fruit();
@@ -226,18 +226,20 @@ void PRIVATE_RENDERER_init_ground(){
 	ground = TFT_make_rect((pos_s){0,0}, bottom_rigth, COLOR_BLACK, TRUE);
 }
 
-void PRIVATE_RENDERER_init_ghosts(){
+void PRIVATE_RENDERER_init_ghosts(bool_e hard){
 	ghosts.img = TFT_make_image((pos_s){0,0}, CASE_HEIGHT, CASE_WIDTH);
-	ghosts.colors[0] = COLOR_RED;
-	ghosts.colors[1] = COLOR_GREEN;
-	ghosts.colors[2] = COLOR_CYAN;
-	ghosts.colors[3] = COLOR_WHITE;
 
-//	ghosts.colors[0] = COLOR_NONE;
-//	ghosts.colors[1] = COLOR_NONE;
-//	ghosts.colors[2] = COLOR_NONE;
-//	ghosts.colors[3] = COLOR_NONE;
-
+	if(hard){
+		ghosts.colors[0] = COLOR_NONE;
+		ghosts.colors[1] = COLOR_NONE;
+		ghosts.colors[2] = COLOR_NONE;
+		ghosts.colors[3] = COLOR_NONE;
+	}else{
+		ghosts.colors[0] = COLOR_RED;
+		ghosts.colors[1] = COLOR_GREEN;
+		ghosts.colors[2] = COLOR_CYAN;
+		ghosts.colors[3] = COLOR_WHITE;
+	}
 
 	TFT_color_e datas[] = {
 		COLOR_NONE, COLOR_NONE, ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], COLOR_NONE, COLOR_NONE,

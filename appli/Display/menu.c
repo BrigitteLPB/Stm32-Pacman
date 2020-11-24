@@ -15,7 +15,7 @@ void menu(){
 
 		case MENU:
 			if(JOYSTICK_getDirection(JOYSTICK2)== DROITE || JOYSTICK_getDirection(JOYSTICK1) == DROITE){
-				LOGICAL_init();
+				LOGICAL_init(TRUE);
 				state = JEU;
 			}
 			break;

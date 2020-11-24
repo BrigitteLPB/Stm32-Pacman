@@ -20,7 +20,7 @@
 // global var
 static volatile bool_e init = FALSE;
 static volatile bool_e MS_FLAGS = FALSE;
-static volatile bool_e EVENT_COUNT = FALSE;
+//static volatile bool_e EVENT_COUNT = FALSE;
 
 static volatile bool_e mur = FALSE;
 static game_s game;
@@ -63,12 +63,13 @@ void PRIVATE_LOGICAL_process_ms(){
 //	}
 }
 
-void LOGICAL_init(void){
+void LOGICAL_init(bool_e hard){
 	if(!init){
 		Systick_add_callback_function(&PRIVATE_LOGICAL_process_ms);
 		RAND_init();
 		init = TRUE;
 		initMAP();
+		game.hard = hard;
 	}
 
 	RENDERER_init(&game);
