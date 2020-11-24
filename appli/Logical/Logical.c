@@ -24,6 +24,7 @@ state_game jeu(){
 	return VerifierEtatJeu();
 }
 
+
 state_game VerifierEtatJeu(){
 	if (game.pacman.state == DEAD){
 		return MENU;
@@ -39,6 +40,7 @@ void mouvement(JOYSTICK_direction direction){
 	static uint16_t x=10;
 	static uint16_t y=10;
 	ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_YELLOW);
+	game.pacman.state = ALIVE;
 	switch(direction){
 		case BAS:
 			y++;
@@ -51,6 +53,8 @@ void mouvement(JOYSTICK_direction direction){
 				ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_YELLOW);
 				if(game.map[x][y] == FANTOME){
 					game.pacman.state = DEAD;
+					x=10;
+					y=10;
 				}
 				else{
 					game.map[x][y] = PACMAN;
@@ -69,6 +73,8 @@ void mouvement(JOYSTICK_direction direction){
 				ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_YELLOW);
 				if(game.map[x][y] == FANTOME){
 					game.pacman.state = DEAD;
+					x=10;
+					y=10;
 				}
 				else{
 					game.map[x][y] = PACMAN;
@@ -86,6 +92,8 @@ void mouvement(JOYSTICK_direction direction){
 				ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_YELLOW);
 				if(game.map[x][y]  == FANTOME){
 					game.pacman.state = DEAD;
+					x=10;
+					y=10;
 				}
 				else{
 					game.map[x][y]  = PACMAN;
@@ -103,6 +111,8 @@ void mouvement(JOYSTICK_direction direction){
 				ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_YELLOW);
 				if(game.map[x][y]  == FANTOME){
 					game.pacman.state = DEAD;
+					x=10;
+					y=10;
 				}
 				else{
 					game.map[x][y]  = PACMAN;
@@ -127,6 +137,10 @@ void fantome_mvt(){
 		ILI9341_DrawFilledRectangle((uint16_t)(x[1]*s),(uint16_t)(y[1]*s),(uint16_t)((x[1]+1)*s),(uint16_t)((y[1]+1)*s),ILI9341_COLOR_MAGENTA);
 		ILI9341_DrawFilledRectangle((uint16_t)(x[2]*s),(uint16_t)(y[2]*s),(uint16_t)((x[2]+1)*s),(uint16_t)((y[2]+1)*s),ILI9341_COLOR_CYAN);
 		ILI9341_DrawFilledRectangle((uint16_t)(x[3]*s),(uint16_t)(y[3]*s),(uint16_t)((x[3]+1)*s),(uint16_t)((y[3]+1)*s),ILI9341_COLOR_RED);
+		if(game.pacman.state == DEAD){
+			static uint16_t x[4]={15,15,16,16};
+			static uint16_t y[4]={11,12,11,12};
+		}
 	}
 }
 
@@ -139,6 +153,7 @@ void sens_fantome(uint16_t* x,uint16_t* y){
 			(*y)--;
 			if(!mur){
 				ILI9341_DrawFilledRectangle((uint16_t)((*x)*s),(uint16_t)((*y)*s),(uint16_t)(((*x)+1)*s),(uint16_t)(((*y)+1)*s),ILI9341_COLOR_BLACK);
+				game.map[*x][*y]  = FREE;
 				(*y)++;
 				ILI9341_DrawFilledRectangle((uint16_t)((*x)*s),(uint16_t)((*y)*s),(uint16_t)(((*x)+1)*s),(uint16_t)(((*y)+1)*s),ILI9341_COLOR_GREEN);
 				if(game.map[*x][*y]  == PACMAN){
@@ -156,6 +171,7 @@ void sens_fantome(uint16_t* x,uint16_t* y){
 			(*x)--;
 			if(!mur){
 				ILI9341_DrawFilledRectangle((uint16_t)((*x)*s),(uint16_t)((*y)*s),(uint16_t)(((*x)+1)*s),(uint16_t)(((*y)+1)*s),ILI9341_COLOR_BLACK);
+				game.map[*x][*y]  = FREE;
 				(*x)++;
 				ILI9341_DrawFilledRectangle((uint16_t)((*x)*s),(uint16_t)((*y)*s),(uint16_t)(((*x)+1)*s),(uint16_t)(((*y)+1)*s),ILI9341_COLOR_GREEN);
 				if(game.map[*x][*y]  == PACMAN){
@@ -174,6 +190,7 @@ void sens_fantome(uint16_t* x,uint16_t* y){
 			(*x)++;
 			if(!mur){
 				ILI9341_DrawFilledRectangle((uint16_t)((*x)*s),(uint16_t)((*y)*s),(uint16_t)(((*x)+1)*s),(uint16_t)(((*y)+1)*s),ILI9341_COLOR_BLACK);
+				game.map[*x][*y]  = FREE;
 				(*x)--;
 				ILI9341_DrawFilledRectangle((uint16_t)((*x)*s),(uint16_t)((*y)*s),(uint16_t)(((*x)+1)*s),(uint16_t)(((*y)+1)*s),ILI9341_COLOR_GREEN);
 				if(game.map[*x][*y]  == PACMAN){
@@ -192,6 +209,7 @@ void sens_fantome(uint16_t* x,uint16_t* y){
 			(*y)++;
 			if(!mur){
 				ILI9341_DrawFilledRectangle((uint16_t)((*x)*s),(uint16_t)((*y)*s),(uint16_t)(((*x)+1)*s),(uint16_t)(((*y)+1)*s),ILI9341_COLOR_BLACK);
+				game.map[*x][*y]  = FREE;
 				(*y)--;
 				ILI9341_DrawFilledRectangle((uint16_t)((*x)*s),(uint16_t)((*y)*s),(uint16_t)(((*x)+1)*s),(uint16_t)(((*y)+1)*s),ILI9341_COLOR_GREEN);
 				if(game.map[*x][*y]  == PACMAN){
