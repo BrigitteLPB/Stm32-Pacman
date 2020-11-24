@@ -22,6 +22,12 @@ static volatile bool FLAG_1S = false;
 
 // private function
 	JOYSTICK_direction PRIVATE_JOYSTICK_getDirection(ADC_CHANNEL X, ADC_CHANNEL Y){
+//		static uint16_t index = 0;
+//		static JOYSTICK_direction dirs[] = {BAS, DROITE};
+//
+//		index++;
+//		return dirs[index-1];
+
 		static int16_t X_value;
 		static int16_t Y_value;
 

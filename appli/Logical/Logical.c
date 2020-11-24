@@ -239,6 +239,7 @@ bool_e PRIVATE_LOGICAL_phantom_contact(PACMAN_position pos){
 }
 
 void fantome_mvt(){
+
 //	static uint16_t x[4]={15,15,16,16};
 //	static uint16_t y[4]={11,12,11,12};
 
@@ -294,6 +295,9 @@ void fantome_mvt(){
 }
 
 void sens_fantome(phantom_s *phantom){
+#define ANCIENNE_IA 0
+
+#if ANCIENNE_IA
 	uint8_t sens = RAND_get()%4;
 	PACMAN_position pos_copy = phantom->pos;
 
@@ -393,6 +397,100 @@ void sens_fantome(phantom_s *phantom){
 //			game.map[phantom->pos.x][phantom->pos.y] = FREE;
 //			break;
 //	}
+#else
+	PACMAN_position pos_copy = phantom->pos;
+	bool_e first = TRUE;
+
+	ghost_direction_e last_dir = G_NEUTRE;
+
+//	bool_e murs[4] = {
+//		getWALL((PACMAN_position){phantom->pos.x,(PACMAN_unit)(phantom->pos.y-1)}),		// haut
+//		getWALL((PACMAN_position){phantom->pos.x,(PACMAN_unit)(phantom->pos.y+1)}),		// bas
+//		getWALL((PACMAN_position){(PACMAN_unit)(phantom->pos.x +1), phantom->pos.y}),	// droite
+//		getWALL((PACMAN_position){(PACMAN_unit)(phantom->pos.x-1),phantom->pos.y})		// gauche
+//	};
+
+	ghost_direction_e back_dir = G_NEUTRE;
+
+	switch(phantom->direction){
+		case HAUT:
+			back_dir = G_BAS;
+			break;
+		case BAS:
+			back_dir = G_HAUT;
+			break;
+		case DROITE:
+			back_dir = G_GAUCHE;
+			break;
+		case GAUCHE:
+			back_dir = G_DROITE;
+			break;
+		default:
+			break;
+	}
+
+	bool_e mur_haut = getWALL((PACMAN_position){phantom->pos.x,(PACMAN_unit)(phantom->pos.y-1)});
+	bool_e mur_bas = getWALL((PACMAN_position){phantom->pos.x,(PACMAN_unit)(phantom->pos.y+1)});
+	bool_e mur_droit = getWALL((PACMAN_position){(PACMAN_unit)(phantom->pos.x +1), phantom->pos.y});
+	bool_e mur_gauche = getWALL((PACMAN_position){(PACMAN_unit)(phantom->pos.x-1),phantom->pos.y});
+
+	bool_e change_dir = FALSE;	// marque le changement de direction
+
+	do{
+		switch(phantom->direction){
+			case G_HAUT:			//haut
+//				mur=getWALL((PACMAN_position){phantom->pos.x,(PACMAN_unit)(phantom->pos.y-1)});
+				if(!mur_haut && ((mur_gauche && mur_droit) || change_dir) && back_dir != phantom->direction){
+					phantom->pos.y--;
+				}else{
+					last_dir = phantom->direction;
+					phantom->direction = G_NEUTRE;
+				}
+				break;
+			case G_BAS :		//bas
+//				mur=getWALL((PACMAN_position){phantom->pos.x,(PACMAN_unit)(phantom->pos.y+1)});
+				if(!mur_bas && ((mur_gauche && mur_droit) || change_dir) && back_dir != phantom->direction){
+					phantom->pos.y++;
+				}else{
+					last_dir = phantom->direction;
+					phantom->direction = G_NEUTRE;
+				}
+				break;
+			case G_DROITE:		//droite
+//				mur=getWALL((PACMAN_position){(PACMAN_unit)(phantom->pos.x +1), phantom->pos.y});
+				if(!mur_droit && ((mur_bas && mur_haut) || change_dir) && back_dir != phantom->direction){
+					phantom->pos.x++;
+				}else{
+					last_dir = phantom->direction;
+					phantom->direction = G_NEUTRE;
+				}
+				break;
+
+			case G_GAUCHE:		//gauche
+//				mur=getWALL((PACMAN_position){(PACMAN_unit)(phantom->pos.x-1),phantom->pos.y});
+				if(!mur_gauche && ((mur_bas && mur_haut) || change_dir) && back_dir != phantom->direction){
+					phantom->pos.x--;
+				}else{
+					last_dir = phantom->direction;
+					phantom->direction = G_NEUTRE;
+				}
+				break;
+			case G_NEUTRE:
+				change_dir = TRUE;
+				if(first){
+					phantom->direction = (ghost_direction_e)(RAND_get()%4);
+					first = FALSE;
+				}else{
+					phantom->direction = (ghost_direction_e)((last_dir+1)%4);
+				}
+				break;
+		}
+	}while(phantom->pos.x == pos_copy.x && phantom->pos.y == pos_copy.y);
+
+	if(game.pacman.pos.x == phantom->pos.x && game.pacman.pos.y == phantom->pos.y){
+		game.pacman.state = DEAD;
+	}
+#endif
 }
 
 void initMAP(){
@@ -425,6 +523,7 @@ void initMAP(){
 			game.map[15+x][11+y] = WALL_WITH_PHANTOM;
 			game.phantoms[phantom_count].pos.x = (PACMAN_unit)(15+x);
 			game.phantoms[phantom_count].pos.y = (PACMAN_unit)(11+y);
+			game.phantoms[phantom_count].direction = NEUTRE;
 			phantom_count++;
 
 

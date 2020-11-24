@@ -60,10 +60,19 @@
 		PREY			//under gumball effect
 	}type_state_PHANTOM;	
 
+	typedef enum {
+		G_HAUT =0,
+		G_BAS =1,
+		G_DROITE =2,
+		G_GAUCHE =3,
+		G_NEUTRE = 4
+	} ghost_direction_e;
+
 	typedef struct {
 		PACMAN_position pos;
 		type_state_PHANTOM state;
 		int8_t timer;		// 0: move, -1: stay, >0: wait for moving
+		ghost_direction_e	direction;
 	}phantom_s;
 
 
