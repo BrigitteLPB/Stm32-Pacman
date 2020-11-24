@@ -23,11 +23,11 @@ void menu(){
 		case JEU:
 			state = jeu(&score);
 			if (state == MENU){
+				LOGICAL_kill();
 				initMenu();
-				LOGICAL_kill();
 			}else if(state == WIN){
-				winMenu();
 				LOGICAL_kill();
+				winMenu();
 			}
 			break;
 

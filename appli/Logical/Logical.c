@@ -56,9 +56,9 @@ void LOGICAL_init(void){
 		Systick_add_callback_function(&PRIVATE_LOGICAL_process_ms);
 		RAND_init();
 		init = TRUE;
+		initMAP();
 	}
 
-	initMAP();
 	RENDERER_init(&game);
 }
 
@@ -360,12 +360,6 @@ void sens_fantome(phantom_s *phantom){
 }
 
 void initMAP(){
-	// pacman
-	game.pacman.score = 0;
-	game.pacman.state = ALIVE;
-	game.pacman.pos.y = 1;
-	game.pacman.pos.x = 1;
-
 	game.points_count = 384;				// nombre de point sur le terrain
 
 	for(int i=0;i<LENGTH;i++){				//point + contours
@@ -378,8 +372,16 @@ void initMAP(){
 		}
 	}
 
+	// pacman
+	game.pacman.score = 0;
+	game.pacman.state = ALIVE;
+	game.pacman.pos.y = 1;
+	game.pacman.pos.x = 1;
+	game.map[game.pacman.pos.x][game.pacman.pos.y] = PACMAN;
+
+
 	game.phantom_count = 4;
-	static uint8_t phantom_count = 0;		//les murs
+	uint8_t phantom_count = 0;				//les murs
 	for(int x=0;x<2;x++){					//carre
 		for(int y=0;y<2;y++){
 			// phantoms

@@ -111,9 +111,9 @@ void RENDERER_init(game_s *game){
 }
 
 void RENDERER_kill(void){
-	IMG_ALLOC_delete(ghosts.img.begin);
-	IMG_ALLOC_delete(pacman.begin);
-	init = FALSE;
+//	IMG_ALLOC_delete(ghosts.img.begin);
+//	IMG_ALLOC_delete(pacman.begin);
+//	init = FALSE;
 }
 
 void RENDERER_reset(game_s *game){
