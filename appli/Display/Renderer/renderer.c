@@ -18,6 +18,10 @@
 #define CASE_HEIGHT	TFT_WIDTH/HEIGHT		// swaping height and width due to the landscape orientation
 #define CASE_WIDTH	TFT_HEIGHT/LENGTH
 
+#define	abs(x)	((x<0)?-x:x)				// absolute fonction
+
+#define HARD_DISTANCE_SHOW	2				// les phantoms sont montres a 2 cases du pacman
+
 typedef enum {
 	GHOST_1,
 	GHOST_2,
@@ -28,7 +32,6 @@ typedef enum {
 typedef struct{
 	TFT_color_e colors[4];
 	TFT_image_s img;
-	bool_e invisible;
 }PRIVATE_img_ghosts_s;
 
 
@@ -51,7 +54,7 @@ static void PRIVATE_RENDERER_init_wall();
 
 static void PRIVATE_RENDERER_init_ground();
 
-static void PRIVATE_RENDERER_init_ghosts(bool_e hard);
+static void PRIVATE_RENDERER_init_ghosts();
 
 static void PRIVATE_RENDERER_init_pacman();
 
@@ -86,7 +89,7 @@ static void PRIVATE_RENDERER_put_ground(PACMAN_position pos);
 /**
  * @param	pos	game position
  */
-static void PRIVATE_RENDERER_put_ghost(PACMAN_position pos, RENDERER_ghost_e ghost_chose);
+static void PRIVATE_RENDERER_put_ghost(PACMAN_position pos, RENDERER_ghost_e ghost_chose, PACMAN_position pacman, bool_e hard);
 
 /**
  * @param	pos	game position
@@ -99,7 +102,7 @@ void RENDERER_init(game_s *game){
 	if(!init){
 		PRIVATE_RENDERER_init_wall();
 		PRIVATE_RENDERER_init_ground();
-		PRIVATE_RENDERER_init_ghosts(game->hard);
+		PRIVATE_RENDERER_init_ghosts();
 		PRIVATE_RENDERER_init_pacman();
 		PRIVATE_RENDERER_init_point();
 		PRIVATE_RENDERER_init_fruit();
@@ -166,7 +169,7 @@ void PRIVATE_RENDERER_show_pac_ghost(game_s *game){
 //				break;
 //
 //		}
-		PRIVATE_RENDERER_put_ghost(game->phantoms[i].pos, (RENDERER_ghost_e)i);
+		PRIVATE_RENDERER_put_ghost(game->phantoms[i].pos, (RENDERER_ghost_e)i, game->pacman.pos, game->hard);
 	}
 
 //	PRIVATE_RENDERER_put_ground(game->pacman.pos);
@@ -227,20 +230,13 @@ void PRIVATE_RENDERER_init_ground(){
 	ground = TFT_make_rect((pos_s){0,0}, bottom_rigth, COLOR_BLACK, TRUE);
 }
 
-void PRIVATE_RENDERER_init_ghosts(bool_e hard){
+void PRIVATE_RENDERER_init_ghosts(){
 	ghosts.img = TFT_make_image((pos_s){0,0}, CASE_HEIGHT, CASE_WIDTH);
 
-	if(hard){
-		ghosts.colors[0] = COLOR_NONE;
-		ghosts.colors[1] = COLOR_NONE;
-		ghosts.colors[2] = COLOR_NONE;
-		ghosts.colors[3] = COLOR_NONE;
-	}else{
-		ghosts.colors[0] = COLOR_RED;
-		ghosts.colors[1] = COLOR_GREEN;
-		ghosts.colors[2] = COLOR_CYAN;
-		ghosts.colors[3] = COLOR_WHITE;
-	}
+	ghosts.colors[0] = COLOR_RED;
+	ghosts.colors[1] = COLOR_GREEN;
+	ghosts.colors[2] = COLOR_CYAN;
+	ghosts.colors[3] = COLOR_WHITE;
 
 	TFT_color_e datas[] = {
 		COLOR_NONE, COLOR_NONE, ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], ghosts.colors[0], COLOR_NONE, COLOR_NONE,
@@ -346,7 +342,14 @@ void PRIVATE_RENDERER_put_ground(PACMAN_position pos){
 	TFT_move_object(&ground, (position)-x, (position)-y);
 }
 
-void PRIVATE_RENDERER_put_ghost(PACMAN_position pos, RENDERER_ghost_e ghost_chose){
+void PRIVATE_RENDERER_put_ghost(PACMAN_position pos, RENDERER_ghost_e ghost_chose, PACMAN_position pacman, bool_e hard){
+	if(hard){
+		// check de la position
+		if(abs(pos.x - pacman.x) > HARD_DISTANCE_SHOW || abs(pos.y - pacman.y) > HARD_DISTANCE_SHOW){
+			return;	// affiche pas si on pas au pres et en hard
+		}	// sinon on fait la suite
+	}
+
 	ghosts.img.position.x = (position) (pos.x * CASE_WIDTH);
 	ghosts.img.position.y = (position)(pos.y * CASE_HEIGHT);
 
