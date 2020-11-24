@@ -22,7 +22,7 @@ static volatile bool_e MS_FLAGS;
 static volatile bool_e mur = FALSE;
 static game_s game;
 //static uint16_t s = 10;
-static uint16_t score = 0;
+//static uint16_t score = 0;
 
 
 // private function
@@ -82,7 +82,9 @@ state_game jeu(){
 state_game VerifierEtatJeu(){
 	if (game.pacman.state == DEAD){
 		return MENU;
-	}else {
+	}else if(game.pacman.score >= game.points_count){
+		return WIN;
+	}else{
 		return JEU;
 	}
 }
@@ -103,8 +105,8 @@ void mouvement(JOYSTICK_direction direction){
 			mur=getWALL(pos);
 			pos.y--;
 			if(mur==FALSE){
-				score++;
-				game.map[pos.x][pos.y]= FREE;
+//				score++;
+//				game.map[pos.x][pos.y]= FREE;
 //				refreshCELL(x,y);
 				pos.y++;
 //				ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_YELLOW);
@@ -123,8 +125,8 @@ void mouvement(JOYSTICK_direction direction){
 			mur=getWALL(pos);
 			pos.x--;
 			if(!mur){
-				score++;
-				game.map[pos.x][pos.y] = FREE;
+//				score++;
+//				game.map[pos.x][pos.y] = FREE;
 //				refreshCELL(x,y);
 				pos.x++;
 //				ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_YELLOW);
@@ -141,8 +143,8 @@ void mouvement(JOYSTICK_direction direction){
 			mur=getWALL(pos);
 			pos.x++;
 			if(!mur){
-				score++;
-				game.map[pos.x][pos.y]  = FREE;
+//				score++;
+//				game.map[pos.x][pos.y]  = FREE;
 //				refreshCELL(x,y);
 				pos.x--;
 //				ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_YELLOW);
@@ -159,8 +161,8 @@ void mouvement(JOYSTICK_direction direction){
 			mur=getWALL(pos);
 			pos.y++;
 			if(!mur){
-				score++;
-				game.map[pos.x][pos.y]  = FREE;
+//				score++;
+//				game.map[pos.x][pos.y]  = FREE;
 //				refreshCELL(x,y);
 				pos.y--;
 //				ILI9341_DrawFilledRectangle((uint16_t)(x*s),(uint16_t)(y*s),(uint16_t)((x+1)*s),(uint16_t)((y+1)*s),ILI9341_COLOR_YELLOW);
@@ -174,6 +176,10 @@ void mouvement(JOYSTICK_direction direction){
 			break;
 		case NEUTRE:
 			break;
+	}
+
+	if(game.map[pos.x][pos.y] == POINT){
+		game.pacman.score++;
 	}
 
 	if(PRIVATE_LOGICAL_phantom_contact(pos)){
@@ -358,6 +364,8 @@ void initMAP(){
 	game.pacman.state = ALIVE;
 	game.pacman.pos.y = 1;
 	game.pacman.pos.x = 1;
+
+	game.points_count = 32;				// nombre de point sur le terrain
 
 	for(int i=0;i<LENGTH;i++){				//point + contours
 		for(int j=0;j<HEIGHT;j++){

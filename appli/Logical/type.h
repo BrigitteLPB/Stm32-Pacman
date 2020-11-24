@@ -77,9 +77,10 @@
 	}game_s;
 
 	typedef enum{
+		INIT,
 		JEU,
 		//GAME_OVER,
-		//WIN,
+		WIN,
 		MENU
 	}state_game;
 

@@ -10,6 +10,6 @@
 
 
 void menu();
-void initMenu();
+
 
 #endif

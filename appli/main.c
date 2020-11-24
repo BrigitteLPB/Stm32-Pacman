@@ -60,7 +60,6 @@ int main(void)
 	TFT_avanced_init(TFT_LANDSCAPE_RIGTH);
 	JOYSTICK_init();
 	BUTTON_init();
-	initMenu();
 
   
 	/*--- TESTS ---*/

@@ -143,7 +143,7 @@ void TFT_put_image_swap_color(TFT_image_s* image, TFT_color_e swapped, TFT_color
 
 void TFT_fill_image(TFT_image_s* image, TFT_color_e data[]){
 	if(image->begin != NULL){
-		for(uint32_t i=0; i<image->height*image->height; i++){
+		for(int32_t i=0; i<image->height*image->width; i++){
 			image->begin[i] = data[i];
 		}
 	}
