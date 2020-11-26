@@ -15,7 +15,7 @@
 
 	// const
 	#define	MAX_IMG_COUNT	10		// maxium number of images loaded
-	#define	BUFFER_SIZE		400	// numbers of octets dedicated to image
+	#define	BUFFER_SIZE		400		// numbers of octets dedicated to image
 
 	typedef TFT_color_e data_t;
 

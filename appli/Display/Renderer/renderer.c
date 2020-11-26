@@ -68,10 +68,6 @@ static void PRIVATE_RENDERER_put_fruit(PACMAN_position pos);
 
 static void PRIVATE_RENDERER_show(game_s* game, bool_e fullPrint);
 
-//static bool_e PRIVATE_RENDERER_anti_ghosting(PACMAN_unit x, PACMAN_unit y, game_s *game, game_s *game_copy);
-
-//static void PRIVATE_RENDERER_clear_ghosting(game_s *game);
-
 static void PRIVATE_RENDERER_show_pac_ghost(game_s *game);
 
 static void PRIVATE_RENDERER_put(PACMAN_position pos, cell_s type);
@@ -115,9 +111,7 @@ void RENDERER_init(game_s *game){
 }
 
 void RENDERER_kill(void){
-//	IMG_ALLOC_delete(ghosts.img.begin);
-//	IMG_ALLOC_delete(pacman.begin);
-//	init = FALSE;
+	// do nothing
 }
 
 void RENDERER_reset(game_s *game){
@@ -152,67 +146,20 @@ void PRIVATE_RENDERER_show(game_s* game, bool_e fullPrint){
 		PRIVATE_RENDERER_show_pac_ghost(game);
 	}
 
-//	PRIVATE_RENDERER_clear_ghosting(game);
-
 	game_copy = *game;
 }
 
 void PRIVATE_RENDERER_show_pac_ghost(game_s *game){
 	for(uint8_t i=0; i<game->phantom_count; i++){
-//		switch(game->map[game->phantoms[i].pos.x][game->phantoms[i].pos.y]){
-//			case FRUIT:
-//			case POINT:
-//			case FREE:
-//				PRIVATE_RENDERER_put_ground(game->phantoms[i].pos);
-//				break;
-//			default:
-//				break;
-//
-//		}
 		PRIVATE_RENDERER_put_ghost(game->phantoms[i].pos, (RENDERER_ghost_e)i, game->pacman.pos, game->hard);
 	}
 
-//	PRIVATE_RENDERER_put_ground(game->pacman.pos);
 	if(game->pacman.state == PREDATOR){
 		PRIVATE_RENDERER_put_pacman(game->pacman.pos, TRUE);
 	}else{
 		PRIVATE_RENDERER_put_pacman(game->pacman.pos, FALSE);
 	}
 }
-
-//bool_e PRIVATE_RENDERER_anti_ghosting(PACMAN_unit x, PACMAN_unit y, game_s *game, game_s *game_copy){
-//	if(x == game->pacman.pos.x && y == game->pacman.pos.y && x != game_copy->pacman.pos.x && y != game_copy->pacman.pos.y){
-//		return TRUE;
-//	}else{
-//		for(uint8_t i=0; i<game->phantom_count; i++){
-////			if(x == game->phantoms[i].pos.x && y == game->phantoms[i].pos.y && game->phantoms[i].pos.x != game_copy->phantoms[i].pos.x && game->phantoms[i].pos.y != game_copy->phantoms[i].pos.y){
-//			if(x == game_copy->phantoms[i].pos.x && y == game_copy->phantoms[i].pos.y){
-//				return TRUE;
-//			}
-//		}
-//		return FALSE;
-//	}
-//}
-
-//void PRIVATE_RENDERER_clear_ghosting(game_s *game){
-//	PACMAN_position positions[5] = {game_copy.pacman.pos, game_copy.phantoms[0].pos, game_copy.phantoms[1].pos, game_copy.phantoms[2].pos, game_copy.phantoms[3].pos};
-//
-//	for(uint8_t i=0; i<game->phantom_count+1; i++){
-//		bool_e update = FALSE;
-//
-//		update = (positions[i].x == game->pacman.pos.x && positions[i].y == game->pacman.pos.y);
-//
-//		for(uint8_t j=0; j<game->phantom_count; j++){
-//			if(positions[i].x == game->phantoms[j].pos.x && positions[i].y == game->phantoms[j].pos.y){
-//				update = TRUE;
-//			}
-//		}
-//
-//		if(update){
-//			PRIVATE_RENDERER_put(positions[i], game->map[positions[i].x][positions[i].y]);
-//		}
-//	}
-//}
 
 void PRIVATE_RENDERER_init_wall(){
 	pos_s bottom_rigth;

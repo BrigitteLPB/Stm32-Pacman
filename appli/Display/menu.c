@@ -15,7 +15,6 @@ void menu(){
 		case INIT:
 			state = MENU;
 			bas = FALSE;
-//			initMenu();
 			break;
 
 		case MENU:
@@ -56,7 +55,6 @@ void menu(){
 
 		case WIN:
 			if(JOYSTICK_getDirection(JOYSTICK2)== DROITE || JOYSTICK_getDirection(JOYSTICK1) == DROITE){
-//				state = INIT;
 				state = MENU;
 				initMenu();
 				bas = FALSE;
@@ -67,7 +65,6 @@ void menu(){
 }
 
 void initMenu(){
-//	ILI9341_DrawFilledRectangle((uint16_t)(0),(uint16_t)(0),(uint16_t)(320),(uint16_t)(240),ILI9341_COLOR_BLACK);
 	TFT_clear(COLOR_BLACK);
 	TFT_text_s text = TFT_make_text("New game", (pos_s){60,140}, FONT_16x26, COLOR_WHITE, COLOR_BLACK);
 	TFT_put_text(&text);
@@ -86,11 +83,6 @@ void initMenu(){
 void winMenu(){
 	TFT_clear(COLOR_BLACK);
 	TFT_text_s text = TFT_make_text("You win !", (pos_s){60,140}, FONT_16x26, COLOR_WHITE, COLOR_BLACK);
-//	char text_score_str[16];
-//	sprintf(text_score_str, "score: %d", score);
-
-//	TFT_text_s text_score = TFT_make_text(text_score_str, (pos_s){100,100}, FONT_16x26, COLOR_WHITE, COLOR_BLACK);
 
 	TFT_put_text(&text);
-//	TFT_put_text(&text_score);
 }

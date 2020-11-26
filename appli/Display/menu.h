@@ -8,7 +8,9 @@
 #include "stdbool.h"
 #include "Logical/type.h"
 
-
+/**
+ * machine d'etat du menu
+ */
 void menu();
 
 

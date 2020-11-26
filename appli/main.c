@@ -37,8 +37,7 @@ bool_e readButton(void)
 int main(void)
 {
 	//Initialisation de la couche logicielle HAL (Hardware Abstraction Layer)
-	//Cette ligne doit rester la premi�re �tape de la fonction main().
-
+	//Cette ligne doit rester la premiere ztape de la fonction main().
 	HAL_Init();
 
 

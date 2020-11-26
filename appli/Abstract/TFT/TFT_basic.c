@@ -427,7 +427,6 @@ void PRIVATE_TFT_draw_object_line(TFT_object_s *object){
 		ILI9341_DrawPixel((uint16_t) object->points[0].x, (uint16_t) object->points[0].y, object->color);
 	}else{
 		for(int i = 0; i < object->nb_points; i++){
-//			ASSERT_T(i == object->nb_points, "L'indice a dépassé la taille du tableau de points d'objet");
 			ILI9341_DrawLine(
 					(uint16_t) object->points[i].x,
 					(uint16_t) object->points[i].y,
@@ -447,7 +446,6 @@ void PRIVATE_TFT_draw_object_fill(TFT_object_s *object){
 		PRIVATE_TFT_draw_object_line(object);
 	}else{
 		for(int i = 1; i < object->nb_points - 1; i++){
-//			ASSERT_T(i == object->nb_points, "L'indice a dépassé la taille du tableau de points d'objet");
 			PRIVATE_TFT_draw_filled_triangle(
 					&object->points[0],
 					&object->points[i],

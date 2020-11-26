@@ -30,7 +30,9 @@
 	 */
 	void RAND_catch_event(void);
 
-
+	/**
+	 * retourne un entier sur 8 bits
+	 */
 	uint8_t RAND_get(void);
 
 
