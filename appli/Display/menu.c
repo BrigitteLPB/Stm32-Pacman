@@ -9,12 +9,13 @@ static uint16_t score = 0;
 
 void menu(){
 	static state_game state = INIT;
-	static bool_e bas = FALSE;
+	static bool_e bas;
 
 	switch(state){
 		case INIT:
 			state = MENU;
-			initMenu();
+			bas = FALSE;
+//			initMenu();
 			break;
 
 		case MENU:
@@ -50,13 +51,15 @@ void menu(){
 			}else if(state == WIN){
 				LOGICAL_kill();
 				winMenu();
-				bas = FALSE;
 			}
 			break;
 
 		case WIN:
-			if(JOYSTICK_getDirection(JOYSTICK2)== DROITE){
-				state = INIT;
+			if(JOYSTICK_getDirection(JOYSTICK2)== DROITE || JOYSTICK_getDirection(JOYSTICK1) == DROITE){
+//				state = INIT;
+				state = MENU;
+				initMenu();
+				bas = FALSE;
 			}
 			break;
 	}

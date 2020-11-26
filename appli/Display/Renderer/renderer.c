@@ -18,7 +18,7 @@
 #define CASE_HEIGHT	TFT_WIDTH/HEIGHT		// swaping height and width due to the landscape orientation
 #define CASE_WIDTH	TFT_HEIGHT/LENGTH
 
-#define	abs(x)	((x<0)?-x:x)				// absolute fonction
+#define	abs(x)	((x<0)?-(x):(x))				// absolute fonction
 
 #define HARD_DISTANCE_SHOW	2				// les phantoms sont montres a 2 cases du pacman
 
@@ -345,7 +345,7 @@ void PRIVATE_RENDERER_put_ground(PACMAN_position pos){
 void PRIVATE_RENDERER_put_ghost(PACMAN_position pos, RENDERER_ghost_e ghost_chose, PACMAN_position pacman, bool_e hard){
 	if(hard){
 		// check de la position
-		if(abs(pos.x - pacman.x) > HARD_DISTANCE_SHOW || abs(pos.y - pacman.y) > HARD_DISTANCE_SHOW){
+		if(!(abs(pos.x - pacman.x) <= HARD_DISTANCE_SHOW && abs(pos.y - pacman.y) <= HARD_DISTANCE_SHOW)){
 			return;	// affiche pas si on pas au pres et en hard
 		}	// sinon on fait la suite
 	}
